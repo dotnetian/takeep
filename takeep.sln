@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "takeep.cli", "takeep.cli\takeep.cli.csproj", "{8F2074E3-526A-4126-891E-057183D217F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Takeep.Core", "Takeep.Core\Takeep.Core.csproj", "{5675A548-75DC-41B5-89E7-0BAFAE6B58DE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BB341E4F-8094-481E-8105-D801363834CB}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +16,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8F2074E3-526A-4126-891E-057183D217F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F2074E3-526A-4126-891E-057183D217F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F2074E3-526A-4126-891E-057183D217F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F2074E3-526A-4126-891E-057183D217F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5675A548-75DC-41B5-89E7-0BAFAE6B58DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5675A548-75DC-41B5-89E7-0BAFAE6B58DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5675A548-75DC-41B5-89E7-0BAFAE6B58DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5675A548-75DC-41B5-89E7-0BAFAE6B58DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
