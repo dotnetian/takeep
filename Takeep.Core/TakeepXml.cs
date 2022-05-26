@@ -32,44 +32,18 @@ namespace Takeep.Core
 
 			string xmlPath = directory + "/default.xml";
 
-			StreamReader file = new (xmlPath);
-
-			if (File.Exists (xmlPath))
+			if (!File.Exists (xmlPath))
 			{
-				// TODO: Continue
+				var stramDefaultXmlInit = new StreamWriter (xmlPath);
 			}
+
+			var stramDefaultXml = new StreamWriter (xmlPath);
 
 			#endregion
 
 			var serializer = new XmlSerializer (typeof (Item));
 
-
-
-			/* #region Write
-			var b = new Book
-			{
-				Title = "Matin's book"
-			};
-
-			var writer = new XmlSerializer (typeof (Book));
-
-			var wfile = new StreamWriter ("C:/users/matin/desktop/XMLTest.xml");
-
-			writer.Serialize (wfile, b);
-
-			wfile.Close ();
-			#endregion
-			#region Read
-			XmlSerializer reader = new (typeof (Book));
-
-			StreamReader file = new ("C:/users/matin/desktop/XMLTest.xml");
-
-			Book overview = (Book)reader.Deserialize (file);
-
-			file.Close ();
-
-			Console.WriteLine (overview.Title);
-			#endregion */
+			serializer.Serialize (stramDefaultXml, item);
 		}
 	}
 }
