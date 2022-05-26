@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Xml;
+using System.Xml.Serialization;
 
 namespace Takeep.Core
 {
@@ -32,18 +33,31 @@ namespace Takeep.Core
 
 			string xmlPath = directory + "/default.xml";
 
-			if (!File.Exists (xmlPath))
-			{
-				var stramDefaultXmlInit = new StreamWriter (xmlPath);
-			}
-
 			var stramDefaultXml = new StreamWriter (xmlPath);
 
 			#endregion
 
-			var serializer = new XmlSerializer (typeof (Item));
+			XmlDocument xmlDefault = new ();
 
-			serializer.Serialize (stramDefaultXml, item);
+			xmlDefault.Load (xmlPath);
+
+			XmlElement parentItem = xmlDefault.CreateElement ("Item");
+
+			XmlElement name = xmlDefault.CreateElement ("Name");
+			name.InnerText = item.Name;
+
+			XmlElement content = xmlDefault.CreateElement ("Content");
+			content.InnerText = item.Content;
+
+			parentItem.AppendChild (name);
+			parentItem.AppendChild (content);
+
+			//xmlDefault.DocumentElement.AppendChild (parentItem);
+			xmlDefault.AppendChild (parentItem);
+
+			xmlDefault.Save (stramDefaultXml);
+
+			stramDefaultXml.Close ();
 		}
 	}
 }
