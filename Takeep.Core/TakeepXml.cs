@@ -1,5 +1,5 @@
-﻿using System.Xml;
-using System.Xml.Serialization;
+﻿using System.Text.Unicode;
+using System.Xml;
 
 namespace Takeep.Core
 {
@@ -33,7 +33,10 @@ namespace Takeep.Core
 
 			string xmlPath = directory + "/default.xml";
 
-			var stramDefaultXml = new StreamWriter (xmlPath);
+			if (!File.Exists (xmlPath))
+			{
+				File.Copy ("/template.xml", xmlPath, true);
+			}
 
 			#endregion
 
@@ -52,12 +55,9 @@ namespace Takeep.Core
 			parentItem.AppendChild (name);
 			parentItem.AppendChild (content);
 
-			//xmlDefault.DocumentElement.AppendChild (parentItem);
-			xmlDefault.AppendChild (parentItem);
+			xmlDefault.DocumentElement.AppendChild (parentItem);
 
-			xmlDefault.Save (stramDefaultXml);
-
-			stramDefaultXml.Close ();
+			xmlDefault.Save (xmlPath);
 		}
 	}
 }
