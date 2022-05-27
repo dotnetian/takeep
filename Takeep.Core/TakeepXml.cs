@@ -1,5 +1,4 @@
-﻿using System.Text.Unicode;
-using System.Xml;
+﻿using System.Xml;
 
 namespace Takeep.Core
 {
