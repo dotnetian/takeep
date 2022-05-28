@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Text.Unicode;
+using System.Xml;
 
 namespace Takeep.Core
 {
@@ -17,7 +18,10 @@ namespace Takeep.Core
 
 			#region Check Directory
 
-			string env = Environment.CurrentDirectory;
+			//string env = Environment.CurrentDirectory;
+			string appCall = Environment.ProcessPath;
+			int pathIndex = appCall.LastIndexOf ('\\');
+			string env = appCall.Substring (0, pathIndex);
 
 			if (!Directory.Exists (env + "/keepsheets"))
 			{
@@ -34,7 +38,7 @@ namespace Takeep.Core
 
 			if (!File.Exists (xmlPath))
 			{
-				File.Copy ("/template.xml", xmlPath, true);
+				File.WriteAllText (xmlPath, "<?xml version=\"1.0\" encoding=\"utf-8\"?><Items></Items>");
 			}
 
 			#endregion
