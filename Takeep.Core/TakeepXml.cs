@@ -18,7 +18,6 @@ namespace Takeep.Core
 
 			#region Check Directory
 
-			//string env = Environment.CurrentDirectory;
 			string appCall = Environment.ProcessPath;
 			int pathIndex = appCall.LastIndexOf ('\\');
 			string env = appCall.Substring (0, pathIndex);
