@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <Version>$(VersionPrefix)</Version>
     <PackageId>$(AssemblyName)</PackageId>
+    <AssemblyName>tkp.core</AssemblyName>
   </PropertyGroup>
 
 </Project>

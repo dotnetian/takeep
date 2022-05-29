@@ -12,6 +12,7 @@
     <RepositoryUrl>https://github.com/matinmn87/takeep</RepositoryUrl>
 		<AssemblyVersion>1.0.0</AssemblyVersion>
     <PackageId>takeep</PackageId>
+    <AssemblyName>tkp</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
