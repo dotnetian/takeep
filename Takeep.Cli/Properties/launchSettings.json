@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Takeep.Cli": {
-      "commandName": "Project",
-      "commandLineArgs": "keep --name Matinmn87 --content matinmn87@gmail.com"
+      "commandName": "Project"
     }
   }
 }

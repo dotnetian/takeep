@@ -5,6 +5,11 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Version>0.1.0</Version>
+    <Authors>@matinmn87 &amp; open-source contributors</Authors>
+    <Product>takeep</Product>
+    <Description>The utility of never getting your texts lost! Takeep is a simple command-line tool that keeps your texts &amp; lets you take them easily</Description>
+    <RepositoryUrl>https://github.com/matinmn87/takeep</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
