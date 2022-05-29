@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Collections.Generic;
+using System.Xml;
 
 namespace Takeep.Core
 {
@@ -15,20 +16,7 @@ namespace Takeep.Core
 
 			#endregion
 
-			#region Check Directory
-
-			string appCall = Environment.ProcessPath;
-			int pathIndex = appCall.LastIndexOf ('\\');
-			string env = appCall.Substring (0, pathIndex);
-
-			if (!Directory.Exists (env + "/keepsheets"))
-			{
-				Directory.CreateDirectory (env + "/keepsheets");
-			}
-
-			string directory = env + "/keepsheets";
-
-			#endregion
+			string directory = CheckDirectory ();
 
 			#region Check File
 
@@ -59,6 +47,46 @@ namespace Takeep.Core
 			xmlDefault.DocumentElement.AppendChild (parentItem);
 
 			xmlDefault.Save (xmlPath);
+		}
+
+		public static Item Take (string name)
+		{
+			string directory = CheckDirectory ();
+
+			string file = directory + "/default.xml";
+
+			XmlDocument document = new ();
+			document.Load (file);
+
+			XmlNodeList nodes = document.DocumentElement.SelectNodes ("Item");
+
+			foreach (XmlNode node in nodes)
+			{
+				if (node["Name"].InnerText == name)
+				{
+					return new Item
+					{
+						Name = name,
+						Content = node["Content"].InnerText
+					};
+				}
+			}
+
+			return null;
+		}
+
+		private static string CheckDirectory ()
+		{
+			string appCall = Environment.ProcessPath;
+			int pathIndex = appCall.LastIndexOf ('\\');
+			string env = appCall.Substring (0, pathIndex);
+
+			if (!Directory.Exists (env + "/keepsheets"))
+			{
+				Directory.CreateDirectory (env + "/keepsheets");
+			}
+
+			return env + "/keepsheets";
 		}
 	}
 }
