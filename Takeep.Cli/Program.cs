@@ -1,7 +1,7 @@
 ﻿using System.CommandLine;
 using Takeep.Core;
 
-var keepName = new Option<string> ("--name", "Gets a name for the keep item");
+var keepName = new Option<string> ("--name", "Gets the name of the item");
 var keepContent = new Option<string> ("--content", "Gets the content of the keep item");
 
 keepName.AddAlias ("-n");
@@ -25,15 +25,24 @@ keepCommand.SetHandler ((string name, string content) =>
 
 }, keepName, keepContent);
 
-var takeOption = new Option<string> ("take", "Takes (finds) an Item by its name");
+var takeName = new Option<string> ("--name", "Gets the name of the item");
+
+takeName.AddAlias ("-n");
+
+var takeCommand = new Command (
+	"take",
+	"Takes (finds) an Item by its name")
+{
+	takeName
+};
 
 var rootCommand = new RootCommand
 {
 	keepCommand,
-	takeOption
+	takeCommand
 };
 
-rootCommand.SetHandler ((string take) =>
+takeCommand.SetHandler ((string take) =>
 {
 	Item item = TakeepXml.Take (take);
 
@@ -52,6 +61,6 @@ rootCommand.SetHandler ((string take) =>
 		Console.WriteLine (item.Content);
 	}
 
-}, takeOption);
+}, takeName);
 
 rootCommand.Invoke (args);
