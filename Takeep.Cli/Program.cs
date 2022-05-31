@@ -36,7 +36,7 @@ var takeCommand = new Command (
 	takeName
 };
 
-var rootCommand = new RootCommand
+var rootCommand = new RootCommand ("takeep is a tool to help you organize your texts")
 {
 	keepCommand,
 	takeCommand
