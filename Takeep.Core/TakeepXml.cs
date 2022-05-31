@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Xml;
+﻿using System.Xml;
 
 namespace Takeep.Core
 {
@@ -77,9 +76,7 @@ namespace Takeep.Core
 
 		private static string CheckDirectory ()
 		{
-			string appCall = Environment.ProcessPath;
-			int pathIndex = appCall.LastIndexOf ('\\');
-			string env = appCall.Substring (0, pathIndex);
+			string env = $"C:/Users/{Environment.UserName}/Documents";
 
 			if (!Directory.Exists (env + "/keepsheets"))
 			{
