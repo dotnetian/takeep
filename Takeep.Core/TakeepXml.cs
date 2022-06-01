@@ -74,6 +74,25 @@ namespace Takeep.Core
 			return null;
 		}
 
+		public static void Remove (string name)
+		{
+			string defaultXml = CheckDirectory () + "/default.xml";
+
+			XmlDocument document = new ();
+			document.Load (defaultXml);
+
+			XmlNodeList nodes = document.DocumentElement.SelectNodes ("Item");
+
+			foreach (XmlNode node in nodes)
+			{
+				if (node["Name"].InnerText == name)
+				{
+					node.ParentNode.RemoveChild(node);
+					document.Save (defaultXml);
+				}
+			}
+		}
+
 		private static string CheckDirectory ()
 		{
 			string env = $"C:/Users/{Environment.UserName}/Documents";
