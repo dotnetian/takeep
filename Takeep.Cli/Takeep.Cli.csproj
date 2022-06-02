@@ -10,7 +10,7 @@
     <Product>takeep</Product>
     <Description>The utility of never getting your texts lost! Takeep is a simple command-line tool that keeps your texts &amp; lets you take them easily</Description>
     <RepositoryUrl>https://github.com/matinmn87/takeep</RepositoryUrl>
-		<AssemblyVersion>1.0.0</AssemblyVersion>
+		<AssemblyVersion>1.1.0</AssemblyVersion>
     <PackageId>takeep</PackageId>
     <AssemblyName>tkp</AssemblyName>
   </PropertyGroup>
