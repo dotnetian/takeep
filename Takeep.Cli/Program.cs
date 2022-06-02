@@ -143,13 +143,24 @@ var editCommand = new Command (
 
 editCommand.SetHandler ((string name, string content) =>
 {
-	TakeepXml.Edit (new Item { Name = name, Content = content });
+	try
+	{
+		TakeepXml.Edit (new Item { Name = name, Content = content });
+
+		Console.ForegroundColor = ConsoleColor.Green;
+		Console.WriteLine ("✓ Successfully edited the item!");
+		Console.ForegroundColor = ConsoleColor.White;
+	}
+	catch (Exception exception)
+	{
+		HandleException (exception);
+	}
 
 }, editName, editContent);
 
 #endregion
 
-var rootCommand = new RootCommand
+var rootCommand = new RootCommand ("takeep is the utility of never getting your texts lost! Takeep is a simple command-line tool that keeps your texts & lets you take them easily")
 {
 	keepCommand,
 	takeCommand,
