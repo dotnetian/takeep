@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using System.Xml.Linq;
 
 namespace Takeep.Core
 {
@@ -87,9 +88,24 @@ namespace Takeep.Core
 			{
 				if (node["Name"].InnerText == name)
 				{
-					node.ParentNode.RemoveChild(node);
+					node.ParentNode.RemoveChild (node);
 					document.Save (defaultXml);
 				}
+			}
+		}
+
+		public static void List ()
+		{
+			string defaultXml = CheckDirectory () + "/default.xml";
+
+			XmlDocument document = new ();
+			document.Load (defaultXml);
+
+			XmlNodeList nodes = document.DocumentElement.SelectNodes ("Item");
+
+			foreach (XmlNode node in nodes)
+			{
+				Console.WriteLine ("	" + node["Name"].InnerText);
 			}
 		}
 

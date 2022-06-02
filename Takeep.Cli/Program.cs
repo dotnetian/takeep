@@ -108,11 +108,26 @@ removeCommand.SetHandler ((string name) =>
 
 #endregion
 
+#region List Command
+
+var listCommand = new Command ("list", "Lists all items in your keepsheet");
+
+listCommand.SetHandler (() =>
+{
+	Console.ForegroundColor = ConsoleColor.Yellow;
+	Console.WriteLine ("■ The list of items of default keepsheet:");
+	Console.ForegroundColor = ConsoleColor.White;
+	TakeepXml.List ();
+});
+
+#endregion
+
 var rootCommand = new RootCommand
 {
 	keepCommand,
 	takeCommand,
-	removeCommand
+	removeCommand,
+	listCommand
 };
 
 
