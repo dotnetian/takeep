@@ -122,12 +122,40 @@ listCommand.SetHandler (() =>
 
 #endregion
 
+#region Edit Command
+
+var editName = new Option<string> ("--name", "Gets the name of the item");
+var editContent = new Option<string> ("--content", "Gets the content of the keep item");
+
+keepName.Arity = ArgumentArity.ExactlyOne;
+editContent.Arity = ArgumentArity.ExactlyOne;
+
+editName.AddAlias ("-n");
+editContent.AddAlias ("-c");
+
+var editCommand = new Command (
+	"edit",
+	"Edits an item's content (not name)")
+{
+	editName,
+	editContent
+};
+
+editCommand.SetHandler ((string name, string content) =>
+{
+	TakeepXml.Edit (new Item { Name = name, Content = content });
+
+}, editName, editContent);
+
+#endregion
+
 var rootCommand = new RootCommand
 {
 	keepCommand,
 	takeCommand,
 	removeCommand,
-	listCommand
+	listCommand,
+	editCommand
 };
 
 

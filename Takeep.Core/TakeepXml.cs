@@ -109,6 +109,63 @@ namespace Takeep.Core
 			}
 		}
 
+		public static void Edit (Item item)
+		{
+			string defaultXml = CheckDirectory () + "/default.xml";
+
+			XmlDocument document = new ();
+			document.Load (defaultXml);
+
+			XmlNodeList nodes = document.DocumentElement.SelectNodes ("Item");
+
+			bool found = false;
+
+			foreach (XmlNode node in nodes)
+			{
+				if (node["Name"].InnerText == item.Name)
+				{
+					node["Content"].InnerText = item.Content;
+
+					document.Save (defaultXml);
+
+					found = true;
+				}
+			}
+
+			if (!found)
+			{
+				Console.WriteLine ($"■ No items found with name {item.Name}. Do you want to keep (create) a new one? (y/n):");
+				string answerText = Console.ReadLine ();
+
+				while (!(answerText == "y" ||
+					answerText == "Y" ||
+					answerText == "yes" ||
+					answerText == "Yes" ||
+					answerText == "n" ||
+					answerText == "N" ||
+					answerText == "No" ||
+					answerText == "no"))
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine ("Incorrect answer");
+					Console.ForegroundColor = ConsoleColor.White;
+
+					Console.WriteLine ($"■ No items found with name {item.Name}. Do you want to keep (create) a new one? (y/n):");
+					answerText = Console.ReadLine ();
+				}
+
+				bool answer = answerText == "y" ||
+					answerText == "Y" ||
+					answerText == "yes" ||
+					answerText == "Yes" ? true : false;
+
+				if (answer)
+				{
+					Keep (item);
+				}
+			}
+		}
+
 		private static string CheckDirectory ()
 		{
 			string env = $"C:/Users/{Environment.UserName}/Documents";
