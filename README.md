@@ -4,6 +4,8 @@ The utility 🔧 of never getting your texts 📃 lost! Takeep is a simple comma
 # How takeep works?
 Takeep is as simple as you can imagine! Add your text to takeep, give it a name, done! Now, you can access your text with 'take' command.
 
+![takeep commands' overview](/files/takeepCommandsPreview.gif)
+
 ```
 > tkp keep -n myToken -c 239840984:sdofum0JDokcdfvjiSiodo
 √ Successfully added the item!
