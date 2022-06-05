@@ -156,6 +156,7 @@ namespace Takeep.Core
 
 			return env + "/keepsheets";
 		}
+
 		private static Item GetItem (string name)
 		{
 			string directory = CheckDirectory ();
