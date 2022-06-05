@@ -25,10 +25,6 @@ keepCommand.SetHandler ((string name, string content) =>
 	try
 	{
 		TakeepXml.Keep (new Item { Name = name, Content = content });
-
-		Console.ForegroundColor = ConsoleColor.Green;
-		Console.WriteLine ("✓ Successfully added the item!");
-		Console.ForegroundColor = ConsoleColor.White;
 	}
 	catch (Exception exception)
 	{
@@ -54,21 +50,17 @@ var takeCommand = new Command (
 
 takeCommand.SetHandler ((string take) =>
 {
-	Item item = TakeepXml.Take (take);
-
-	if (item == null)
+	if (take == null)
 	{
 		Console.ForegroundColor = ConsoleColor.Red;
-		Console.WriteLine ($"■ No items found with name \"{take}\"");
+		Console.Write ("You must enter ");
+		Console.ForegroundColor = ConsoleColor.White;
+		Console.Write ("name");
 		Console.ForegroundColor = ConsoleColor.White;
 	}
 	else
 	{
-		Console.ForegroundColor = ConsoleColor.Yellow;
-		Console.WriteLine ($"■ This is the content of {item.Name}:");
-		Console.ForegroundColor = ConsoleColor.White;
-
-		Console.WriteLine (item.Content);
+		TakeepXml.Take (take);
 	}
 
 }, takeName);
@@ -94,10 +86,6 @@ removeCommand.SetHandler ((string name) =>
 	try
 	{
 		TakeepXml.Remove (name);
-
-		Console.ForegroundColor = ConsoleColor.Green;
-		Console.WriteLine ("✓ Successfully removed the item!");
-		Console.ForegroundColor = ConsoleColor.White;
 	}
 	catch (Exception exception)
 	{
@@ -146,10 +134,6 @@ editCommand.SetHandler ((string name, string content) =>
 	try
 	{
 		TakeepXml.Edit (new Item { Name = name, Content = content });
-
-		Console.ForegroundColor = ConsoleColor.Green;
-		Console.WriteLine ("✓ Successfully edited the item!");
-		Console.ForegroundColor = ConsoleColor.White;
 	}
 	catch (Exception exception)
 	{

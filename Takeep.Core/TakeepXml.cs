@@ -1,5 +1,5 @@
-﻿using System.Xml;
-using System.Xml.Linq;
+﻿using System.Runtime.CompilerServices;
+using System.Xml;
 
 namespace Takeep.Core
 {
@@ -7,14 +7,10 @@ namespace Takeep.Core
 	{
 		public static void Keep (Item item)
 		{
-			#region Check Nulls
-
-			if (item == null)
+			if (!CheckNulls (item))
 			{
-				throw new ArgumentNullException (nameof (item));
+				return;
 			}
-
-			#endregion
 
 			string directory = CheckDirectory ();
 
@@ -47,36 +43,35 @@ namespace Takeep.Core
 			xmlDefault.DocumentElement.AppendChild (parentItem);
 
 			xmlDefault.Save (xmlPath);
+
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine ("✓ Successfully added the item!");
+			Console.ForegroundColor = ConsoleColor.White;
 		}
 
-		public static Item Take (string name)
+		public static void Take (string name)
 		{
-			string directory = CheckDirectory ();
+			Item? item = GetItem (name);
 
-			string file = directory + "/default.xml";
-
-			XmlDocument document = new ();
-			document.Load (file);
-
-			XmlNodeList nodes = document.DocumentElement.SelectNodes ("Item");
-
-			foreach (XmlNode node in nodes)
+			if (!CheckNulls (name))
 			{
-				if (node["Name"].InnerText == name)
-				{
-					return new Item
-					{
-						Name = name,
-						Content = node["Content"].InnerText
-					};
-				}
+				return;
 			}
 
-			return null;
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.WriteLine ($"■ This is the content of {item.Name}:");
+			Console.ForegroundColor = ConsoleColor.White;
+
+			Console.WriteLine (item.Content);
 		}
 
 		public static void Remove (string name)
 		{
+			if (!CheckNulls (name))
+			{
+				return;
+			}
+
 			string defaultXml = CheckDirectory () + "/default.xml";
 
 			XmlDocument document = new ();
@@ -90,8 +85,20 @@ namespace Takeep.Core
 				{
 					node.ParentNode.RemoveChild (node);
 					document.Save (defaultXml);
+
+					Console.ForegroundColor = ConsoleColor.Green;
+					Console.WriteLine ("✓ Successfully removed the item!");
+					Console.ForegroundColor = ConsoleColor.White;
+
+					return;
 				}
 			}
+
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.Write ("No items found with name ");
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.Write (name);
+			Console.ForegroundColor = ConsoleColor.White;
 		}
 
 		public static void List ()
@@ -111,14 +118,17 @@ namespace Takeep.Core
 
 		public static void Edit (Item item)
 		{
+			if (!CheckNulls (item))
+			{
+				return;
+			}
+
 			string defaultXml = CheckDirectory () + "/default.xml";
 
 			XmlDocument document = new ();
 			document.Load (defaultXml);
 
 			XmlNodeList nodes = document.DocumentElement.SelectNodes ("Item");
-
-			bool found = false;
 
 			foreach (XmlNode node in nodes)
 			{
@@ -128,40 +138,9 @@ namespace Takeep.Core
 
 					document.Save (defaultXml);
 
-					found = true;
-				}
-			}
-
-			if (!found)
-			{
-				Console.WriteLine ($"■ No items found with name {item.Name}. Do you want to keep (create) a new one? (y/n):");
-				string answerText = Console.ReadLine ();
-
-				while (!(answerText == "y" ||
-					answerText == "Y" ||
-					answerText == "yes" ||
-					answerText == "Yes" ||
-					answerText == "n" ||
-					answerText == "N" ||
-					answerText == "No" ||
-					answerText == "no"))
-				{
-					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine ("Incorrect answer");
+					Console.ForegroundColor = ConsoleColor.Green;
+					Console.WriteLine ("✓ Successfully edited the item!");
 					Console.ForegroundColor = ConsoleColor.White;
-
-					Console.WriteLine ($"■ No items found with name {item.Name}. Do you want to keep (create) a new one? (y/n):");
-					answerText = Console.ReadLine ();
-				}
-
-				bool answer = answerText == "y" ||
-					answerText == "Y" ||
-					answerText == "yes" ||
-					answerText == "Yes" ? true : false;
-
-				if (answer)
-				{
-					Keep (item);
 				}
 			}
 		}
@@ -176,6 +155,67 @@ namespace Takeep.Core
 			}
 
 			return env + "/keepsheets";
+		}
+		private static Item GetItem (string name)
+		{
+			string directory = CheckDirectory ();
+
+			string file = directory + "/default.xml";
+
+			XmlDocument document = new ();
+			document.Load (file);
+
+			XmlNodeList nodes = document.DocumentElement.SelectNodes ("Item");
+
+			foreach (XmlNode node in nodes)
+			{
+				if (node["Name"].InnerText == name)
+				{
+					return new Item { Name = node["Name"].InnerText, Content = node["Content"].InnerText };
+				}
+			}
+
+			return null;
+		}
+
+		private static bool CheckNulls (Item item, [CallerMemberName] string callerName = "")
+		{
+			if (item == null || item.Name == null || item.Content == null || string.IsNullOrWhiteSpace (item.Name) || string.IsNullOrWhiteSpace (item.Content))
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.Write ("You must enter both name & content correctly. For more info, enter: ");
+				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.Write ("tkp ");
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.Write ($"{callerName.ToLower ()} ");
+				Console.ForegroundColor = ConsoleColor.DarkGray;
+				Console.Write ("--help");
+				Console.ForegroundColor = ConsoleColor.White;
+
+				return false;
+			}
+
+			return true;
+		}
+
+		private static bool CheckNulls (string name, [CallerMemberName] string callerName = "")
+		{
+			if (string.IsNullOrWhiteSpace (name))
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.Write ("You must enter name correctly. For more info, enter: ");
+				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.Write ("tkp ");
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.Write ($"{callerName.ToLower ()} ");
+				Console.ForegroundColor = ConsoleColor.DarkGray;
+				Console.Write ("--help");
+				Console.ForegroundColor = ConsoleColor.White;
+
+				return false;
+			}
+
+			return true;
 		}
 	}
 }
