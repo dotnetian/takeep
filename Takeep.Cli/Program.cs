@@ -154,7 +154,7 @@ var rootCommand = new RootCommand ("takeep is the utility of never getting your 
 };
 
 
-rootCommand.Invoke (args);
+rootCommand.Invoke ("keep -n oidfjhodfo");
 
 void HandleException (Exception exception)
 {

@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Xml;
 
 namespace Takeep.Core
@@ -7,8 +9,14 @@ namespace Takeep.Core
 	{
 		public static void Keep (Item item)
 		{
-			if (!CheckNulls (item))
+			if (!CheckNulls (item.Name))
 			{
+				return;
+			}
+
+			if (item.Content == null)
+			{
+				EditNotepad (item.Name);
 				return;
 			}
 
@@ -177,6 +185,84 @@ namespace Takeep.Core
 			}
 
 			return null;
+		}
+
+		private static void EditNotepad (string name)
+		{
+			string directory = CheckDirectory ();
+
+			string filePath = directory + "/ITEM_CONTENT";
+			File.Delete (filePath);
+
+			#region Get Text
+			File.WriteAllText (filePath, $"/# Enter the content of item \"{name}\".");
+
+			FileInfo fileInfo = new (filePath);
+			File.SetAttributes (filePath, FileAttributes.Hidden);
+
+
+			DateTime initialWriteTime = fileInfo.LastWriteTime;
+			DateTime lastWriteTime = initialWriteTime;
+
+			var processInfo = new ProcessStartInfo ("notepad.exe", filePath)
+			{
+				CreateNoWindow = false,
+				UseShellExecute = false,
+				RedirectStandardError = true,
+				RedirectStandardOutput = true,
+				WorkingDirectory = @"C:\Windows\System32\"
+			};
+
+			Process p = Process.Start (processInfo);
+
+			while (lastWriteTime == initialWriteTime)
+			{
+				int pid = p.Id;
+				Process checkProcess = Process.GetProcessById (pid);
+
+				// TODO: Complete checking if process is closed or not
+
+				if (checkProcess == null)
+				{
+					Console.WriteLine ("OFOODOSD");
+				}
+
+				fileInfo = new (filePath);
+				lastWriteTime = fileInfo.LastWriteTime;
+			}
+
+			p.Kill ();
+			#endregion
+
+			#region Process text
+			string[] writtenFileContent = File.ReadAllLines (filePath);
+
+			for (int i = 0; i < writtenFileContent.Length; i++)
+			{
+				if (writtenFileContent[i].StartsWith ("/# "))
+				{
+					writtenFileContent = writtenFileContent.Where ((source, index) => index != i).ToArray ();
+				}
+			}
+
+			string finalContent = string.Empty;
+
+			foreach (var line in writtenFileContent)
+			{
+				if (string.IsNullOrWhiteSpace (finalContent))
+				{
+					finalContent += line;
+				}
+				else
+				{
+					finalContent += Environment.NewLine + line;
+				}
+			}
+
+			Keep (new Item { Name = name, Content = finalContent});
+			#endregion
+
+			Console.ReadLine ();
 		}
 
 		private static bool CheckNulls (Item item, [CallerMemberName] string callerName = "")
