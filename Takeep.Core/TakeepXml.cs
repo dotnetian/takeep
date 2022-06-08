@@ -218,13 +218,16 @@ namespace Takeep.Core
 			while (lastWriteTime == initialWriteTime)
 			{
 				int pid = p.Id;
+
 				Process checkProcess = Process.GetProcessById (pid);
 
-				// TODO: Complete checking if process is closed or not
-
-				if (checkProcess == null)
+				if (checkProcess.HasExited)
 				{
-					Console.WriteLine ("OFOODOSD");
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine ("The process was aborted: Notepad was closed");
+					Console.ForegroundColor = ConsoleColor.White;
+					
+					return;
 				}
 
 				fileInfo = new (filePath);
@@ -259,10 +262,19 @@ namespace Takeep.Core
 				}
 			}
 
-			Keep (new Item { Name = name, Content = finalContent});
-			#endregion
+			if (string.IsNullOrWhiteSpace (finalContent))
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine ("The process was aborted: Text was empty");
+				Console.ForegroundColor = ConsoleColor.White;
+				
+				return;
+			}
 
-			Console.ReadLine ();
+			Keep (new Item { Name = name, Content = finalContent });
+
+			File.Delete (filePath);
+			#endregion
 		}
 
 		private static bool CheckNulls (Item item, [CallerMemberName] string callerName = "")
