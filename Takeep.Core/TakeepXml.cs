@@ -56,7 +56,7 @@ namespace Takeep.Core
 			Console.ForegroundColor = ConsoleColor.White;
 		}
 
-		public static void Take (string name)
+		public static void Take (string name, bool copy = false)
 		{
 			Item? item = GetItem (name);
 
@@ -65,11 +65,22 @@ namespace Takeep.Core
 				return;
 			}
 
-			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.WriteLine ($"■ This is the content of {item.Name}:");
-			Console.ForegroundColor = ConsoleColor.White;
+			if (!copy)
+			{
+				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.WriteLine ($"■ This is the content of {item.Name}:");
+				Console.ForegroundColor = ConsoleColor.White;
 
-			Console.WriteLine (item.Content);
+				Console.WriteLine (item.Content);
+			}
+			else
+			{
+				TakeepClipboard.Copy (item.Content);
+
+				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.WriteLine ($"■ {item.Name} successfully copied to your clipboard");
+				Console.ForegroundColor = ConsoleColor.White;
+			}
 		}
 
 		public static void Remove (string name)
@@ -225,7 +236,7 @@ namespace Takeep.Core
 					Console.ForegroundColor = ConsoleColor.Red;
 					Console.WriteLine ("The process was aborted: Notepad was closed");
 					Console.ForegroundColor = ConsoleColor.White;
-					
+
 					return;
 				}
 
@@ -266,7 +277,7 @@ namespace Takeep.Core
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine ("The process was aborted: Text was empty");
 				Console.ForegroundColor = ConsoleColor.White;
-				
+
 				return;
 			}
 

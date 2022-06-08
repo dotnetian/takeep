@@ -38,17 +38,22 @@ keepCommand.SetHandler ((string name, string content) =>
 
 var takeName = new Option<string> ("--name", "Gets the name of the item");
 takeName.Arity = ArgumentArity.ExactlyOne;
-
 takeName.AddAlias ("-n");
+
+
+var takeCopy = new Option<bool> ("--copy", "Copies the item's text to clipboard");
+takeCopy.Arity = ArgumentArity.ZeroOrOne;
+takeCopy.AddAlias ("-c");
 
 var takeCommand = new Command (
 	"take",
 	"Takes (finds) an Item")
 {
-	takeName
+	takeName,
+	takeCopy
 };
 
-takeCommand.SetHandler ((string take) =>
+takeCommand.SetHandler ((string take, bool copy) =>
 {
 	if (take == null)
 	{
@@ -60,10 +65,10 @@ takeCommand.SetHandler ((string take) =>
 	}
 	else
 	{
-		TakeepXml.Take (take);
+		TakeepXml.Take (take, copy);
 	}
 
-}, takeName);
+}, takeName, takeCopy);
 
 #endregion
 
