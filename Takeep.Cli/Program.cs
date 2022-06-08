@@ -4,13 +4,13 @@ using Takeep.Core;
 #region Keep Command
 
 var keepName = new Option<string> ("--name", "Gets the name of the item");
-var keepContent = new Option<string> ("--content", "Gets the content of the keep item");
+var keepContent = new Option<string> ("--text", "Gets the content of the keep item");
 
 keepName.Arity = ArgumentArity.ExactlyOne;
 keepContent.Arity = ArgumentArity.ExactlyOne;
 
 keepName.AddAlias ("-n");
-keepContent.AddAlias ("-c");
+keepContent.AddAlias ("-t");
 
 var keepCommand = new Command (
 	"keep",
@@ -113,13 +113,13 @@ listCommand.SetHandler (() =>
 #region Edit Command
 
 var editName = new Option<string> ("--name", "Gets the name of the item");
-var editContent = new Option<string> ("--content", "Gets the content of the keep item");
+var editContent = new Option<string> ("--text", "Gets the content of the keep item");
 
 keepName.Arity = ArgumentArity.ExactlyOne;
 editContent.Arity = ArgumentArity.ExactlyOne;
 
 editName.AddAlias ("-n");
-editContent.AddAlias ("-c");
+editContent.AddAlias ("-t");
 
 var editCommand = new Command (
 	"edit",
@@ -152,7 +152,6 @@ var rootCommand = new RootCommand ("takeep is the utility of never getting your 
 	listCommand,
 	editCommand
 };
-
 
 rootCommand.Invoke (args);
 
