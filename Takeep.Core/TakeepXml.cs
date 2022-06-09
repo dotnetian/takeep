@@ -253,6 +253,8 @@ namespace Takeep.Core
 					Console.WriteLine ("The process was aborted: Notepad was closed");
 					Console.ForegroundColor = ConsoleColor.White;
 
+					File.Delete (filePath);
+
 					return;
 				}
 
@@ -294,6 +296,8 @@ namespace Takeep.Core
 				Console.WriteLine ("The process was aborted: Text was empty");
 				Console.ForegroundColor = ConsoleColor.White;
 
+				File.Delete (filePath);
+				
 				return;
 			}
 
