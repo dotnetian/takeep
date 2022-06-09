@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Xml;
 
@@ -128,7 +127,7 @@ namespace Takeep.Core
 
 		public static void List ()
 		{
-			string defaultXml = CheckDirectory () + "/default.xml";
+			string defaultXml = CheckDirectory () + CheckFile (true);
 
 			XmlDocument document = new ();
 			document.Load (defaultXml);
@@ -148,7 +147,7 @@ namespace Takeep.Core
 				return;
 			}
 
-			string defaultXml = CheckDirectory () + "/default.xml";
+			string defaultXml = CheckDirectory () + CheckFile (true);
 
 			XmlDocument document = new ();
 			document.Load (defaultXml);
