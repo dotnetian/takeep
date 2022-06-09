@@ -13,6 +13,19 @@ namespace Takeep.Core
 				return;
 			}
 
+			#region Check if item exists
+
+			if (GetItem (item.Name) != null)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine ("The process was aborted: An item with this name currenty exists");
+				Console.ForegroundColor = ConsoleColor.White;
+
+				return;
+			}
+
+			#endregion
+
 			if (item.Content == null)
 			{
 				EditNotepad (item.Name);
@@ -31,6 +44,7 @@ namespace Takeep.Core
 			}
 
 			#endregion
+
 
 			XmlDocument xmlDefault = new ();
 
@@ -56,13 +70,13 @@ namespace Takeep.Core
 			Console.ForegroundColor = ConsoleColor.White;
 		}
 
-		public static void Take (string name, bool copy = false)
+		public static bool Take (string name, bool copy = false)
 		{
 			Item? item = GetItem (name);
 
 			if (!CheckNulls (name))
 			{
-				return;
+				return false;
 			}
 
 			if (!copy)
@@ -81,6 +95,8 @@ namespace Takeep.Core
 				Console.WriteLine ($"■ {item.Name} successfully copied to your clipboard");
 				Console.ForegroundColor = ConsoleColor.White;
 			}
+
+			return true;
 		}
 
 		public static void Remove (string name)
