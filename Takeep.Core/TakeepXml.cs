@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Xml;
 
@@ -34,17 +35,7 @@ namespace Takeep.Core
 
 			string directory = CheckDirectory ();
 
-			#region Check File
-
-			string xmlPath = directory + "/default.xml";
-
-			if (!File.Exists (xmlPath))
-			{
-				File.WriteAllText (xmlPath, "<?xml version=\"1.0\" encoding=\"utf-8\"?><Items></Items>");
-			}
-
-			#endregion
-
+			string xmlPath = CheckFile ();
 
 			XmlDocument xmlDefault = new ();
 
@@ -106,7 +97,7 @@ namespace Takeep.Core
 				return;
 			}
 
-			string defaultXml = CheckDirectory () + "/default.xml";
+			string defaultXml = CheckDirectory () + CheckFile (true);
 
 			XmlDocument document = new ();
 			document.Load (defaultXml);
@@ -188,14 +179,36 @@ namespace Takeep.Core
 				Directory.CreateDirectory (env + "/keepsheets");
 			}
 
+			if (File.Exists (env + "/keepsheets/default.xml"))
+			{
+				CheckFile ();
+			}
+
 			return env + "/keepsheets";
+		}
+
+		private static string CheckFile (bool shortPath = false)
+		{
+			string xmlPath = $"C:/Users/{Environment.UserName}/Documents/keepsheets/default.xml";
+
+			if (!File.Exists (xmlPath))
+			{
+				File.WriteAllText (xmlPath, "<?xml version=\"1.0\" encoding=\"utf-8\"?><Items></Items>");
+			}
+
+			if (shortPath)
+			{
+				return "/default.xml";
+			}
+
+			return xmlPath;
 		}
 
 		private static Item GetItem (string name)
 		{
 			string directory = CheckDirectory ();
 
-			string file = directory + "/default.xml";
+			string file = CheckFile ();
 
 			XmlDocument document = new ();
 			document.Load (file);
@@ -297,7 +310,7 @@ namespace Takeep.Core
 				Console.ForegroundColor = ConsoleColor.White;
 
 				File.Delete (filePath);
-				
+
 				return;
 			}
 
