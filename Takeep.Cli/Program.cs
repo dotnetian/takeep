@@ -65,7 +65,14 @@ takeCommand.SetHandler ((string take, bool copy) =>
 	}
 	else
 	{
-		TakeepXml.Take (take, copy);
+		try
+		{
+			TakeepXml.Take (take, copy);
+		}
+		catch (Exception exeption)
+		{
+			HandleException (exeption);
+		}
 	}
 
 }, takeName, takeCopy);
@@ -107,10 +114,19 @@ var listCommand = new Command ("list", "Lists all items in your keepsheet");
 
 listCommand.SetHandler (() =>
 {
-	Console.ForegroundColor = ConsoleColor.Yellow;
-	Console.WriteLine ("■ The list of items of default keepsheet:");
-	Console.ForegroundColor = ConsoleColor.White;
-	TakeepXml.List ();
+	try
+	{
+		TakeepXml.List ();
+
+		Console.ForegroundColor = ConsoleColor.Yellow;
+		Console.WriteLine ("■ The list of items of default keepsheet:");
+		Console.ForegroundColor = ConsoleColor.White;
+	}
+	catch (Exception exception)
+	{
+		HandleException (exception);
+	}
+
 });
 
 #endregion
@@ -163,6 +179,7 @@ rootCommand.Invoke (args);
 void HandleException (Exception exception)
 {
 	Console.ForegroundColor = ConsoleColor.Red;
-	Console.WriteLine ("Oops! Something wrong happened. if you continue seeing this error, please tell us: https://github.com/matinmn87/takeep");
+	Console.WriteLine ("Oops! Something wrong happened. The error message was copied to your clipboard. if you continue seeing this error, please tell us: https://github.com/matinmn87/takeep/issues");
+	TakeepClipboard.Copy (exception.Message);
 	Console.ForegroundColor = ConsoleColor.White;
 }
