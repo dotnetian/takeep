@@ -60,7 +60,7 @@ namespace Takeep.Core
 			Console.ForegroundColor = ConsoleColor.White;
 		}
 
-		public static bool Take (string name, bool copy = false)
+		public static bool Take (string name, bool copy = false, bool notepad = false)
 		{
 			Item? item = GetItem (name);
 
@@ -69,7 +69,11 @@ namespace Takeep.Core
 				return false;
 			}
 
-			if (!copy)
+			if (notepad)
+			{
+				ViewNotepad (name);
+			}
+			else if (!copy)
 			{
 				Console.ForegroundColor = ConsoleColor.Yellow;
 				Console.WriteLine ($"■ This is the content of {item.Name}:");
@@ -317,6 +321,62 @@ namespace Takeep.Core
 
 			File.Delete (filePath);
 			#endregion
+		}
+
+		private static void ViewNotepad (string name)
+		{
+			string directory = CheckDirectory ();
+
+			string filePath = directory + "/ITEM_CONTENT";
+			File.Delete (filePath);
+
+			File.WriteAllText (filePath, GetItem(name).Content);
+
+			FileInfo fileInfo = new (filePath);
+			File.SetAttributes (filePath, FileAttributes.Hidden);
+
+			DateTime initialWriteTime = fileInfo.LastWriteTime;
+			DateTime lastWriteTime = initialWriteTime;
+
+			Console.WriteLine ("Opening Notepad...");
+
+			var processInfo = new ProcessStartInfo ("notepad.exe", filePath)
+			{
+				CreateNoWindow = false,
+				UseShellExecute = false,
+				RedirectStandardError = true,
+				RedirectStandardOutput = true,
+				WorkingDirectory = @"C:\Windows\System32\"
+			};
+
+			Process p = Process.Start (processInfo);
+
+			while (lastWriteTime == initialWriteTime)
+			{
+				int pid = p.Id;
+
+				Process checkProcess = Process.GetProcessById (pid);
+
+				if (checkProcess.HasExited)
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine ("Notepad was closed");
+					Console.ForegroundColor = ConsoleColor.White;
+
+					File.Delete (filePath);
+
+					return;
+				}
+
+				fileInfo = new (filePath);
+				lastWriteTime = fileInfo.LastWriteTime;
+			}
+
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine ("Editing the text will not affect the item. If you want to edit the item, please use the \"edit\" command.");
+			Console.ForegroundColor = ConsoleColor.White;
+
+			p.Kill ();
 		}
 
 		private static bool CheckNulls (Item item, [CallerMemberName] string callerName = "")

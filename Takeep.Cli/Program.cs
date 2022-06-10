@@ -45,15 +45,20 @@ var takeCopy = new Option<bool> ("--copy", "Copies the item's text to clipboard"
 takeCopy.Arity = ArgumentArity.ZeroOrOne;
 takeCopy.AddAlias ("-c");
 
+var takeNotepad = new Option<bool> ("--open", "Opens the item's content in notepad");
+takeNotepad.Arity = ArgumentArity.ZeroOrOne;
+takeNotepad.AddAlias ("-o");
+
 var takeCommand = new Command (
 	"take",
 	"Takes (finds) an Item")
 {
 	takeName,
-	takeCopy
+	takeCopy,
+	takeNotepad
 };
 
-takeCommand.SetHandler ((string take, bool copy) =>
+takeCommand.SetHandler ((string take, bool copy, bool notepad) =>
 {
 	if (take == null)
 	{
@@ -67,7 +72,7 @@ takeCommand.SetHandler ((string take, bool copy) =>
 	{
 		try
 		{
-			TakeepXml.Take (take, copy);
+			TakeepXml.Take (take, copy, notepad);
 		}
 		catch (Exception exeption)
 		{
@@ -75,7 +80,7 @@ takeCommand.SetHandler ((string take, bool copy) =>
 		}
 	}
 
-}, takeName, takeCopy);
+}, takeName, takeCopy, takeNotepad);
 
 #endregion
 
