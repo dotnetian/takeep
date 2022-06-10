@@ -139,34 +139,39 @@ listCommand.SetHandler (() =>
 #region Edit Command
 
 var editName = new Option<string> ("--name", "Gets the name of the item");
-var editContent = new Option<string> ("--text", "Gets the content of the keep item");
+editName.AddAlias ("-n");
+editName.Arity = ArgumentArity.ExactlyOne;
 
-keepName.Arity = ArgumentArity.ExactlyOne;
+var editContent = new Option<string> ("--text", "Gets the content of the keep item");
+editContent.AddAlias ("-t");
 editContent.Arity = ArgumentArity.ExactlyOne;
 
-editName.AddAlias ("-n");
-editContent.AddAlias ("-t");
+var editNotepad = new Option<bool> ("--open", "Opens the item in notepad");
+editNotepad.Arity = ArgumentArity.ZeroOrOne;
+editNotepad.AddAlias ("-o");
+
 
 var editCommand = new Command (
 	"edit",
 	"Edits an item's content (not name)")
 {
 	editName,
-	editContent
+	editContent,
+	editNotepad
 };
 
-editCommand.SetHandler ((string name, string content) =>
+editCommand.SetHandler ((string name, string content, bool notepad) =>
 {
 	try
 	{
-		TakeepXml.Edit (new Item { Name = name, Content = content });
+		TakeepXml.Edit (new Item { Name = name, Content = content }, notepad);
 	}
 	catch (Exception exception)
 	{
 		HandleException (exception);
 	}
 
-}, editName, editContent);
+}, editName, editContent, editNotepad);
 
 #endregion
 
