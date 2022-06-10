@@ -330,7 +330,8 @@ namespace Takeep.Core
 			string filePath = directory + "/ITEM_CONTENT";
 			File.Delete (filePath);
 
-			File.WriteAllText (filePath, GetItem(name).Content);
+			File.WriteAllText (filePath, $"/# This is the content of item \"{name}\":{Environment.NewLine}");
+			File.AppendAllText (filePath, GetItem(name).Content);
 
 			FileInfo fileInfo = new (filePath);
 			File.SetAttributes (filePath, FileAttributes.Hidden);
@@ -359,10 +360,6 @@ namespace Takeep.Core
 
 				if (checkProcess.HasExited)
 				{
-					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine ("Notepad was closed");
-					Console.ForegroundColor = ConsoleColor.White;
-
 					File.Delete (filePath);
 
 					return;
