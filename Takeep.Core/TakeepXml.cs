@@ -28,7 +28,7 @@ namespace Takeep.Core
 
 			if (item.Content == null)
 			{
-				EditNotepad (item.Name);
+				AddNotepad (item.Name);
 				return;
 			}
 
@@ -60,7 +60,7 @@ namespace Takeep.Core
 			Console.ForegroundColor = ConsoleColor.White;
 		}
 
-		public static bool Take (string name, bool copy = false)
+		public static bool Take (string name, bool copy = false, bool notepad = false)
 		{
 			Item? item = GetItem (name);
 
@@ -69,7 +69,11 @@ namespace Takeep.Core
 				return false;
 			}
 
-			if (!copy)
+			if (notepad)
+			{
+				ViewNotepad (name);
+			}
+			else if (!copy)
 			{
 				Console.ForegroundColor = ConsoleColor.Yellow;
 				Console.WriteLine ($"■ This is the content of {item.Name}:");
@@ -140,9 +144,24 @@ namespace Takeep.Core
 			}
 		}
 
-		public static void Edit (Item item)
+		public static void Edit (Item item, bool notepad = false)
 		{
-			if (!CheckNulls (item))
+			if (notepad)
+			{
+				if (!CheckNulls (item.Name))
+				{
+					return;
+				}
+
+				item.Content = EditNotepad (item.Name);
+
+			}
+			else if (!CheckNulls (item))
+			{
+				return;
+			}
+
+			if (item.Content == null)
 			{
 				return;
 			}
@@ -225,7 +244,7 @@ namespace Takeep.Core
 			return null;
 		}
 
-		private static void EditNotepad (string name)
+		private static void AddNotepad (string name)
 		{
 			string directory = CheckDirectory ();
 
@@ -316,6 +335,155 @@ namespace Takeep.Core
 			Keep (new Item { Name = name, Content = finalContent });
 
 			File.Delete (filePath);
+			#endregion
+		}
+
+		private static void ViewNotepad (string name)
+		{
+			string directory = CheckDirectory ();
+
+			string filePath = directory + "/ITEM_CONTENT";
+			File.Delete (filePath);
+
+			File.WriteAllText (filePath, $"/# This is the content of item \"{name}\":{Environment.NewLine}");
+			File.AppendAllText (filePath, GetItem (name).Content);
+
+			FileInfo fileInfo = new (filePath);
+			File.SetAttributes (filePath, FileAttributes.Hidden);
+
+			DateTime initialWriteTime = fileInfo.LastWriteTime;
+			DateTime lastWriteTime = initialWriteTime;
+
+			Console.WriteLine ("Opening Notepad...");
+
+			var processInfo = new ProcessStartInfo ("notepad.exe", filePath)
+			{
+				CreateNoWindow = false,
+				UseShellExecute = false,
+				RedirectStandardError = true,
+				RedirectStandardOutput = true,
+				WorkingDirectory = @"C:\Windows\System32\"
+			};
+
+			Process p = Process.Start (processInfo);
+
+			while (lastWriteTime == initialWriteTime)
+			{
+				int pid = p.Id;
+
+				Process checkProcess = Process.GetProcessById (pid);
+
+				if (checkProcess.HasExited)
+				{
+					File.Delete (filePath);
+
+					return;
+				}
+
+				fileInfo = new (filePath);
+				lastWriteTime = fileInfo.LastWriteTime;
+			}
+
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine ("Editing the text will not affect the item. If you want to edit the item, please use the \"edit\" command.");
+			Console.ForegroundColor = ConsoleColor.White;
+
+			p.Kill ();
+		}
+
+		private static string EditNotepad (string name)
+		{
+			string directory = CheckDirectory ();
+
+			string filePath = directory + "/ITEM_CONTENT";
+			File.Delete (filePath);
+
+			#region Get Text
+			File.WriteAllText (filePath, $"/# This is the content of item \"{name}\":{Environment.NewLine}");
+			File.AppendAllText (filePath, GetItem (name).Content);
+
+			FileInfo fileInfo = new (filePath);
+			File.SetAttributes (filePath, FileAttributes.Hidden);
+
+
+			DateTime initialWriteTime = fileInfo.LastWriteTime;
+			DateTime lastWriteTime = initialWriteTime;
+
+			var processInfo = new ProcessStartInfo ("notepad.exe", filePath)
+			{
+				CreateNoWindow = false,
+				UseShellExecute = false,
+				RedirectStandardError = true,
+				RedirectStandardOutput = true,
+				WorkingDirectory = @"C:\Windows\System32\"
+			};
+
+			Process p = Process.Start (processInfo);
+
+			while (lastWriteTime == initialWriteTime)
+			{
+				int pid = p.Id;
+
+				Process checkProcess = Process.GetProcessById (pid);
+
+				if (checkProcess.HasExited)
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine ("The process was aborted: Notepad was closed");
+					Console.ForegroundColor = ConsoleColor.White;
+
+					File.Delete (filePath);
+
+					return null;
+				}
+
+				fileInfo = new (filePath);
+				lastWriteTime = fileInfo.LastWriteTime;
+			}
+
+			p.Kill ();
+			#endregion
+
+			#region Process text
+			string[] writtenFileContent = File.ReadAllLines (filePath);
+
+			for (int i = 0; i < writtenFileContent.Length; i++)
+			{
+				if (writtenFileContent[i].StartsWith ("/# "))
+				{
+					writtenFileContent = writtenFileContent.Where ((source, index) => index != i).ToArray ();
+				}
+			}
+
+			string finalContent = string.Empty;
+
+			foreach (var line in writtenFileContent)
+			{
+				if (string.IsNullOrWhiteSpace (finalContent))
+				{
+					finalContent += line;
+				}
+				else
+				{
+					finalContent += Environment.NewLine + line;
+				}
+			}
+
+			if (string.IsNullOrWhiteSpace (finalContent))
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine ("The process was aborted: Text was empty");
+				Console.ForegroundColor = ConsoleColor.White;
+
+				File.Delete (filePath);
+
+				return null;
+			}
+
+
+			File.Delete (filePath);
+
+			return finalContent;
 			#endregion
 		}
 
