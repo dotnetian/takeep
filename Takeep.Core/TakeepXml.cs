@@ -197,7 +197,7 @@ namespace Takeep.Core
 				Directory.CreateDirectory (env + "/keepsheets");
 			}
 
-			if (File.Exists (env + "/keepsheets/default.xml"))
+			if (File.Exists (env + "/keepsheets/default.tkp"))
 			{
 				CheckFile ();
 			}
@@ -207,7 +207,7 @@ namespace Takeep.Core
 
 		private static string CheckFile (bool shortPath = false)
 		{
-			string xmlPath = $"C:/Users/{Environment.UserName}/Documents/keepsheets/default.xml";
+			string xmlPath = $"C:/Users/{Environment.UserName}/Documents/keepsheets/default.tkp";
 
 			if (!File.Exists (xmlPath))
 			{
@@ -216,7 +216,7 @@ namespace Takeep.Core
 
 			if (shortPath)
 			{
-				return "/default.xml";
+				return "/default.tkp";
 			}
 
 			return xmlPath;
