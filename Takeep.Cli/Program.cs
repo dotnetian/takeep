@@ -3,8 +3,8 @@ using Takeep.Core;
 
 #region Keep Command
 
-var keepName = new Option<string> ("--name", "Gets the name of the item");
-var keepContent = new Option<string> ("--text", "Gets the content of the keep item");
+var keepName = new Option<string> ("--name", "The name of the item. The item will be known & shown by this name");
+var keepContent = new Option<string> ("--text", "The text of the item. The main content you want to keep");
 
 keepName.Arity = ArgumentArity.ExactlyOne;
 keepContent.Arity = ArgumentArity.ExactlyOne;
@@ -14,7 +14,7 @@ keepContent.AddAlias ("-t");
 
 var keepCommand = new Command (
 	"keep",
-	"Keeps (Adds) a text in default takesheet")
+	$"Keeps (Adds) a text in default takesheet.{Environment.NewLine}Example: tkp keep -n test -t \"This is the test text\" (Recommanded for short & quick texts).{Environment.NewLine}Not specifying text (-t or --text) will open notepad, so you can write your text there easier (Recommanded for long or multiline texts).")
 {
 	keepName,
 	keepContent
