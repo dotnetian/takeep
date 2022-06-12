@@ -14,7 +14,7 @@ keepContent.AddAlias ("-t");
 
 var keepCommand = new Command (
 	"keep",
-	$"Keeps (Adds) a text in default takesheet.{Environment.NewLine}Example: tkp keep -n test -t \"This is the test text\" (Recommanded for short & quick texts).{Environment.NewLine}Not specifying text (-t or --text) will open notepad, so you can write your text there easier (Recommanded for long or multiline texts).")
+	$"Keeps (Adds) a text in default takesheet.{Environment.NewLine}Example: 	tkp keep -n test -t \"This is the test text\" (Recommanded for short & quick texts).{Environment.NewLine}Not specifying text (-t or --text) will open notepad, so you can write your text there easier (Recommanded for long or multiline texts).")
 {
 	keepName,
 	keepContent
@@ -51,7 +51,7 @@ takeNotepad.AddAlias ("-o");
 
 var takeCommand = new Command (
 	"take",
-	$"Takes (shows) an Item's text. Take command is useful if you have the exact name of the item & you want to access to it's content.{Environment.NewLine}Examples:{Environment.NewLine}tkp take -n test    (Writes the text in console, great for quick access){Environment.NewLine}tkp take -n test -c (Copies the text to clipboard, useful if you don't want to text be shown on screen){Environment.NewLine}tkp take -n test -o (Opens the text in notepad, great for long texts)")
+	$"Takes (shows) an Item's text. Take command is useful if you have the exact name of the item & you want to access to it's content.{Environment.NewLine}Examples:{Environment.NewLine}	tkp take -n test    (Writes the text in console, great for quick access){Environment.NewLine}	tkp take -n test -c (Copies the text to clipboard, useful if you don't want to text be shown on screen){Environment.NewLine}	tkp take -n test -o (Opens the text in notepad, great for long texts)")
 {
 	takeName,
 	takeCopy,
@@ -93,7 +93,7 @@ removeName.Arity = ArgumentArity.ExactlyOne;
 
 var removeCommand = new Command (
 	"remove",
-	$"Removes an item. Example:{Environment.NewLine}tkp remove -n test")
+	$"Removes an item. Example:{Environment.NewLine}	tkp remove -n test")
 {
 	removeName
 };
@@ -153,7 +153,7 @@ editNotepad.AddAlias ("-o");
 
 var editCommand = new Command (
 	"edit",
-	$"Edits an item's content. Examples:{Environment.NewLine}tkp edit -n test -t \"This is not the test text\" (Edits the text of the item named test to \"This is not the test text\", great for quick & single-line edits){Environment.NewLine}tkp edit -n test -o (Opens the text in notepad, great for long texts)")
+	$"Edits an item's content. Examples:{Environment.NewLine}	tkp edit -n test -t \"This is not the test text\" (Edits the text of the item named test to \"This is not the test text\", great for quick & single-line edits){Environment.NewLine}	tkp edit -n test -o (Opens the text in notepad, great for long texts)")
 {
 	editName,
 	editContent,
