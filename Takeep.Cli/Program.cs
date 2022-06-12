@@ -86,14 +86,14 @@ takeCommand.SetHandler ((string take, bool copy, bool notepad) =>
 
 #region Remove Command
 
-var removeName = new Option<string> ("--name", "Gets the name of the item");
+var removeName = new Option<string> ("--name", "The name of the item");
 
 removeName.AddAlias ("-n");
 removeName.Arity = ArgumentArity.ExactlyOne;
 
 var removeCommand = new Command (
 	"remove",
-	"Removes an item")
+	$"Removes an item. Example:{Environment.NewLine}tkp remove -n test")
 {
 	removeName
 };
