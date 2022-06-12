@@ -3,8 +3,8 @@ using Takeep.Core;
 
 #region Keep Command
 
-var keepName = new Option<string> ("--name", "Gets the name of the item");
-var keepContent = new Option<string> ("--text", "Gets the content of the keep item");
+var keepName = new Option<string> ("--name", "The name of the item. The item will be known & shown by this name");
+var keepContent = new Option<string> ("--text", "The text of the item. The main content you want to keep");
 
 keepName.Arity = ArgumentArity.ExactlyOne;
 keepContent.Arity = ArgumentArity.ExactlyOne;
@@ -14,7 +14,7 @@ keepContent.AddAlias ("-t");
 
 var keepCommand = new Command (
 	"keep",
-	"Keeps (Adds) a text in default takesheet")
+	$"Keeps (Adds) a text in default takesheet.{Environment.NewLine}Example: 	tkp keep -n test -t \"This is the test text\" (Recommanded for short & quick texts).{Environment.NewLine}Not specifying text (-t or --text) will open notepad, so you can write your text there easier (Recommanded for long or multiline texts).")
 {
 	keepName,
 	keepContent
@@ -36,12 +36,12 @@ keepCommand.SetHandler ((string name, string content) =>
 
 #region Take Command
 
-var takeName = new Option<string> ("--name", "Gets the name of the item");
+var takeName = new Option<string> ("--name", "The name of the item");
 takeName.Arity = ArgumentArity.ExactlyOne;
 takeName.AddAlias ("-n");
 
 
-var takeCopy = new Option<bool> ("--copy", "Copies the item's text to clipboard");
+var takeCopy = new Option<bool> ("--copy", "Copies the item's text to clipboard & doesn't shows it");
 takeCopy.Arity = ArgumentArity.ZeroOrOne;
 takeCopy.AddAlias ("-c");
 
@@ -51,7 +51,7 @@ takeNotepad.AddAlias ("-o");
 
 var takeCommand = new Command (
 	"take",
-	"Takes (finds) an Item")
+	$"Takes (shows) an Item's text. Take command is useful if you have the exact name of the item & you want to access to it's content.{Environment.NewLine}Examples:{Environment.NewLine}	tkp take -n test    (Writes the text in console, great for quick access){Environment.NewLine}	tkp take -n test -c (Copies the text to clipboard, useful if you don't want to text be shown on screen){Environment.NewLine}	tkp take -n test -o (Opens the text in notepad, great for long texts)")
 {
 	takeName,
 	takeCopy,
@@ -86,14 +86,14 @@ takeCommand.SetHandler ((string take, bool copy, bool notepad) =>
 
 #region Remove Command
 
-var removeName = new Option<string> ("--name", "Gets the name of the item");
+var removeName = new Option<string> ("--name", "The name of the item");
 
 removeName.AddAlias ("-n");
 removeName.Arity = ArgumentArity.ExactlyOne;
 
 var removeCommand = new Command (
 	"remove",
-	"Removes an item")
+	$"Removes an item. Example:{Environment.NewLine}	tkp remove -n test")
 {
 	removeName
 };
@@ -138,22 +138,22 @@ listCommand.SetHandler (() =>
 
 #region Edit Command
 
-var editName = new Option<string> ("--name", "Gets the name of the item");
+var editName = new Option<string> ("--name", "The name of the item");
 editName.AddAlias ("-n");
 editName.Arity = ArgumentArity.ExactlyOne;
 
-var editContent = new Option<string> ("--text", "Gets the content of the keep item");
+var editContent = new Option<string> ("--text", "The text of the item.");
 editContent.AddAlias ("-t");
 editContent.Arity = ArgumentArity.ExactlyOne;
 
-var editNotepad = new Option<bool> ("--open", "Opens the item in notepad");
+var editNotepad = new Option<bool> ("--open", "Opens the item's content in notepad");
 editNotepad.Arity = ArgumentArity.ZeroOrOne;
 editNotepad.AddAlias ("-o");
 
 
 var editCommand = new Command (
 	"edit",
-	"Edits an item's content (not name)")
+	$"Edits an item's content. Examples:{Environment.NewLine}	tkp edit -n test -t \"This is not the test text\" (Edits the text of the item named test to \"This is not the test text\", great for quick & single-line edits){Environment.NewLine}	tkp edit -n test -o (Opens the text in notepad, great for long texts)")
 {
 	editName,
 	editContent,
