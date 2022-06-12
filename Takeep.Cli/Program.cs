@@ -138,22 +138,22 @@ listCommand.SetHandler (() =>
 
 #region Edit Command
 
-var editName = new Option<string> ("--name", "Gets the name of the item");
+var editName = new Option<string> ("--name", "The name of the item");
 editName.AddAlias ("-n");
 editName.Arity = ArgumentArity.ExactlyOne;
 
-var editContent = new Option<string> ("--text", "Gets the content of the keep item");
+var editContent = new Option<string> ("--text", "The text of the item.");
 editContent.AddAlias ("-t");
 editContent.Arity = ArgumentArity.ExactlyOne;
 
-var editNotepad = new Option<bool> ("--open", "Opens the item in notepad");
+var editNotepad = new Option<bool> ("--open", "Opens the item's content in notepad");
 editNotepad.Arity = ArgumentArity.ZeroOrOne;
 editNotepad.AddAlias ("-o");
 
 
 var editCommand = new Command (
 	"edit",
-	"Edits an item's content (not name)")
+	$"Edits an item's content. Examples:{Environment.NewLine}tkp edit -n test -t \"This is not the test text\" (Edits the text of the item named test to \"This is not the test text\", great for quick & single-line edits){Environment.NewLine}tkp edit -n test -o (Opens the text in notepad, great for long texts)")
 {
 	editName,
 	editContent,
