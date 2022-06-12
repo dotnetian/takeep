@@ -36,12 +36,12 @@ keepCommand.SetHandler ((string name, string content) =>
 
 #region Take Command
 
-var takeName = new Option<string> ("--name", "Gets the name of the item");
+var takeName = new Option<string> ("--name", "The name of the item");
 takeName.Arity = ArgumentArity.ExactlyOne;
 takeName.AddAlias ("-n");
 
 
-var takeCopy = new Option<bool> ("--copy", "Copies the item's text to clipboard");
+var takeCopy = new Option<bool> ("--copy", "Copies the item's text to clipboard & doesn't shows it");
 takeCopy.Arity = ArgumentArity.ZeroOrOne;
 takeCopy.AddAlias ("-c");
 
@@ -51,7 +51,7 @@ takeNotepad.AddAlias ("-o");
 
 var takeCommand = new Command (
 	"take",
-	"Takes (finds) an Item")
+	$"Takes (shows) an Item's text. Take command is useful if you have the exact name of the item & you want to access to it's content.{Environment.NewLine}Examples:{Environment.NewLine}tkp take -n test    (Writes the text in console, great for quick access){Environment.NewLine}tkp take -n test -c (Copies the text to clipboard, useful if you don't want to text be shown on screen){Environment.NewLine}tkp take -n test -o (Opens the text in notepad, great for long texts)")
 {
 	takeName,
 	takeCopy,
