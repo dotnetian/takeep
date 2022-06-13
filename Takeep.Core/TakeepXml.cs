@@ -129,7 +129,7 @@ namespace Takeep.Core
 			Console.ForegroundColor = ConsoleColor.White;
 		}
 
-		public static void List ()
+		public static void List (string name = "")
 		{
 			string defaultXml = CheckDirectory () + CheckFile (true);
 
@@ -138,9 +138,37 @@ namespace Takeep.Core
 
 			XmlNodeList nodes = document.DocumentElement.SelectNodes ("Item");
 
-			foreach (XmlNode node in nodes)
+			int returns = 0;
+
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.WriteLine ("■ The list of items of default keepsheet:");
+			Console.ForegroundColor = ConsoleColor.White;
+
+			if (!string.IsNullOrEmpty (name))
 			{
-				Console.WriteLine ("	" + node["Name"].InnerText);
+				foreach (XmlNode node in nodes)
+				{
+					if (node["Name"].InnerText.Contains (name))
+					{
+						Console.WriteLine ("	" + node["Name"].InnerText);
+						returns++;
+					}
+				}
+			}
+			else
+			{
+				foreach (XmlNode node in nodes)
+				{
+					Console.WriteLine ("	" + node["Name"].InnerText);
+					returns++;
+				}
+			}
+
+			if (returns == 0)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine ($"The process war aborted: No item's name found containing \"{name}\"");
+				Console.ForegroundColor = ConsoleColor.White;
 			}
 		}
 
