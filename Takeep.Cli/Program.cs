@@ -115,24 +115,26 @@ removeCommand.SetHandler ((string name) =>
 
 #region List Command
 
-var listCommand = new Command ("list", "Lists all items in your keepsheet");
+var listName = new Option<string> ("--name");
+listName.AddAlias ("-n");
 
-listCommand.SetHandler (() =>
+var listCommand = new Command ("list", "Lists all items in your keepsheet")
+{
+	listName
+};
+
+listCommand.SetHandler ((string name) =>
 {
 	try
 	{
-		TakeepXml.List ();
-
-		Console.ForegroundColor = ConsoleColor.Yellow;
-		Console.WriteLine ("■ The list of items of default keepsheet:");
-		Console.ForegroundColor = ConsoleColor.White;
+		TakeepXml.List (name);
 	}
 	catch (Exception exception)
 	{
 		HandleException (exception);
 	}
 
-});
+}, listName);
 
 #endregion
 
