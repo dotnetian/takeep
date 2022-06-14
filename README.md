@@ -1,4 +1,4 @@
-# takeep
+# takeep ![GitHub last commit](https://img.shields.io/github/last-commit/matinmn87/takeep?color=%237676ec&style=flat-square) ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/matinmn87/takeep?color=%237676ec&style=flat-square) ![GitHub](https://img.shields.io/github/license/matinmn87/takeep?color=%237676ec&style=flat-square) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/matinmn87/takeep?color=%237676ec&label=latest%20release&style=flat-square)
 The utility 🔧 of never getting your texts 📃 lost! Takeep is a simple command-line 🧑‍💻 tool that keeps 🗃️ your texts & lets you take them easily 🙂.
 
 # How takeep works?
