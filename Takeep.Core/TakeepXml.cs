@@ -69,6 +69,17 @@ namespace Takeep.Core
 				return false;
 			}
 
+			if (item == null)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.Write ("No items found with name ");
+				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.Write (name);
+				Console.ForegroundColor = ConsoleColor.White;
+				
+				return false;
+			}
+
 			if (notepad)
 			{
 				ViewNotepad (name);

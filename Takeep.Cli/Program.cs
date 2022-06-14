@@ -186,7 +186,7 @@ var rootCommand = new RootCommand ("takeep is the utility of never getting your 
 	editCommand
 };
 
-rootCommand.Invoke (args);
+rootCommand.Invoke ("take -n eXe");
 
 void HandleException (Exception exception)
 {
