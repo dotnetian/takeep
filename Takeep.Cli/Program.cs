@@ -23,7 +23,7 @@ keepCommand.SetHandler ((string name, string content) =>
 {
 	try
 	{
-		TakeepXml.Keep (new Item { Name = name, Content = content });
+		TakeepXml.Keep (new Item { Name = name, Text = content });
 	}
 	catch (Exception exception)
 	{
@@ -167,7 +167,7 @@ editCommand.SetHandler ((string name, string content, bool notepad) =>
 {
 	try
 	{
-		TakeepXml.Edit (new Item { Name = name, Content = content }, notepad);
+		TakeepXml.Edit (new Item { Name = name, Text = content }, notepad);
 	}
 	catch (Exception exception)
 	{

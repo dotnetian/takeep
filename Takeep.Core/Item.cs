@@ -3,6 +3,6 @@
 	public class Item
 	{
 		public string Name { get; set; }
-		public string Content { get; set; }
+		public string Text { get; set; }
 	}
 }

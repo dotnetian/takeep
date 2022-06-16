@@ -8,10 +8,14 @@ namespace Takeep.Core
 	{
 		public static void Keep (Item item)
 		{
+			#region Check if name is null
+
 			if (!CheckNulls (item.Name))
 			{
 				return;
 			}
+
+			#endregion
 
 			#region Check if item exists
 
@@ -26,15 +30,19 @@ namespace Takeep.Core
 
 			#endregion
 
-			if (item.Content == null)
+			#region Check if should be opened in notepad
+
+			if (item.Text == null)
 			{
 				AddNotepad (item.Name);
 				return;
 			}
 
-			string directory = CheckDirectory ();
+			#endregion
 
-			string xmlPath = CheckFile ();
+			#region Keep item
+
+			string xmlPath = CheckDirectory () + CheckFile (true);
 
 			XmlDocument xmlDefault = new ();
 
@@ -45,8 +53,8 @@ namespace Takeep.Core
 			XmlElement name = xmlDefault.CreateElement ("Name");
 			name.InnerText = item.Name;
 
-			XmlElement content = xmlDefault.CreateElement ("Content");
-			content.InnerText = item.Content;
+			XmlElement content = xmlDefault.CreateElement ("Text");
+			content.InnerText = item.Text;
 
 			parentItem.AppendChild (name);
 			parentItem.AppendChild (content);
@@ -55,9 +63,15 @@ namespace Takeep.Core
 
 			xmlDefault.Save (xmlPath);
 
+			#endregion
+
+			#region Write success
+
 			Console.ForegroundColor = ConsoleColor.Green;
 			Console.WriteLine ("✓ Successfully added the item!");
 			Console.ForegroundColor = ConsoleColor.White;
+
+			#endregion
 		}
 
 		public static bool Take (string name, bool copy = false, bool notepad = false)
@@ -76,7 +90,7 @@ namespace Takeep.Core
 				Console.ForegroundColor = ConsoleColor.Yellow;
 				Console.Write (name);
 				Console.ForegroundColor = ConsoleColor.White;
-				
+
 				return false;
 			}
 
@@ -90,11 +104,11 @@ namespace Takeep.Core
 				Console.WriteLine ($"■ This is the content of {item.Name}:");
 				Console.ForegroundColor = ConsoleColor.White;
 
-				Console.WriteLine (item.Content);
+				Console.WriteLine (item.Text);
 			}
 			else
 			{
-				TakeepClipboard.Copy (item.Content);
+				TakeepClipboard.Copy (item.Text);
 
 				Console.ForegroundColor = ConsoleColor.Yellow;
 				Console.WriteLine ($"■ {item.Name} successfully copied to your clipboard");
@@ -192,7 +206,7 @@ namespace Takeep.Core
 					return;
 				}
 
-				item.Content = EditNotepad (item.Name);
+				item.Text = EditNotepad (item.Name);
 
 			}
 			else if (!CheckNulls (item))
@@ -200,7 +214,7 @@ namespace Takeep.Core
 				return;
 			}
 
-			if (item.Content == null)
+			if (item.Text == null)
 			{
 				return;
 			}
@@ -216,7 +230,7 @@ namespace Takeep.Core
 			{
 				if (node["Name"].InnerText == item.Name)
 				{
-					node["Content"].InnerText = item.Content;
+					node["Text"].InnerText = item.Text;
 
 					document.Save (defaultXml);
 
@@ -276,7 +290,7 @@ namespace Takeep.Core
 			{
 				if (node["Name"].InnerText == name)
 				{
-					return new Item { Name = node["Name"].InnerText, Content = node["Content"].InnerText };
+					return new Item { Name = node["Name"].InnerText, Text = node["Text"].InnerText };
 				}
 			}
 
@@ -371,7 +385,7 @@ namespace Takeep.Core
 				return;
 			}
 
-			Keep (new Item { Name = name, Content = finalContent });
+			Keep (new Item { Name = name, Text = finalContent });
 
 			File.Delete (filePath);
 			#endregion
@@ -385,7 +399,7 @@ namespace Takeep.Core
 			File.Delete (filePath);
 
 			File.WriteAllText (filePath, $"/# This is the content of item \"{name}\":{Environment.NewLine}");
-			File.AppendAllText (filePath, GetItem (name).Content);
+			File.AppendAllText (filePath, GetItem (name).Text);
 
 			FileInfo fileInfo = new (filePath);
 			File.SetAttributes (filePath, FileAttributes.Hidden);
@@ -439,7 +453,7 @@ namespace Takeep.Core
 
 			#region Get Text
 			File.WriteAllText (filePath, $"/# This is the content of item \"{name}\":{Environment.NewLine}");
-			File.AppendAllText (filePath, GetItem (name).Content);
+			File.AppendAllText (filePath, GetItem (name).Text);
 
 			FileInfo fileInfo = new (filePath);
 			File.SetAttributes (filePath, FileAttributes.Hidden);
@@ -528,7 +542,7 @@ namespace Takeep.Core
 
 		private static bool CheckNulls (Item item, [CallerMemberName] string callerName = "")
 		{
-			if (item == null || item.Name == null || item.Content == null || string.IsNullOrWhiteSpace (item.Name) || string.IsNullOrWhiteSpace (item.Content))
+			if (item == null || item.Name == null || item.Text == null || string.IsNullOrWhiteSpace (item.Name) || string.IsNullOrWhiteSpace (item.Text))
 			{
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.Write ("You must enter both name & content correctly. For more info, enter: ");
