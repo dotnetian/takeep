@@ -76,6 +76,8 @@ namespace Takeep.Core
 
 		public static bool Take (string name, bool copy = false, bool notepad = false)
 		{
+			#region Check if name is null
+			
 			Item? item = GetItem (name);
 
 			if (!CheckNulls (name))
@@ -83,6 +85,10 @@ namespace Takeep.Core
 				return false;
 			}
 
+			#endregion
+
+			#region Check if item is valid
+			
 			if (item == null)
 			{
 				Console.ForegroundColor = ConsoleColor.Red;
@@ -94,10 +100,18 @@ namespace Takeep.Core
 				return false;
 			}
 
+			#endregion
+
+			#region Check if should be opened in notepad
+
 			if (notepad)
 			{
 				ViewNotepad (name);
 			}
+			#endregion
+
+			#region Check if should be printed on screen
+
 			else if (!copy)
 			{
 				Console.ForegroundColor = ConsoleColor.Yellow;
@@ -106,6 +120,9 @@ namespace Takeep.Core
 
 				Console.WriteLine (item.Text);
 			}
+			#endregion
+
+			#region Check if should be copied to clipboard
 			else
 			{
 				TakeepClipboard.Copy (item.Text);
@@ -114,6 +131,7 @@ namespace Takeep.Core
 				Console.WriteLine ($"■ {item.Name} successfully copied to your clipboard");
 				Console.ForegroundColor = ConsoleColor.White;
 			}
+			#endregion
 
 			return true;
 		}
