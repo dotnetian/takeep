@@ -4,12 +4,11 @@ using Takeep.Core;
 #region Keep Command
 
 var keepName = new Option<string> ("--name", "The name of the item. The item will be known & shown by this name");
-var keepContent = new Option<string> ("--text", "The text of the item. The main content you want to keep");
-
 keepName.Arity = ArgumentArity.ExactlyOne;
-keepContent.Arity = ArgumentArity.ExactlyOne;
-
 keepName.AddAlias ("-n");
+
+var keepContent = new Option<string> ("--text", "The text of the item. The main content you want to keep");
+keepContent.Arity = ArgumentArity.ExactlyOne;
 keepContent.AddAlias ("-t");
 
 var keepCommand = new Command (
@@ -87,7 +86,6 @@ takeCommand.SetHandler ((string take, bool copy, bool notepad) =>
 #region Remove Command
 
 var removeName = new Option<string> ("--name", "The name of the item");
-
 removeName.AddAlias ("-n");
 removeName.Arity = ArgumentArity.ExactlyOne;
 
@@ -117,8 +115,11 @@ removeCommand.SetHandler ((string name) =>
 
 var listName = new Option<string> ("--name");
 listName.AddAlias ("-n");
+listName.Arity = ArgumentArity.ZeroOrOne;
 
-var listCommand = new Command ("list", "Lists all items in your keepsheet")
+var listCommand = new Command (
+	"list", 
+	"Lists all items in your keepsheet")
 {
 	listName
 };
