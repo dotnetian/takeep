@@ -77,7 +77,7 @@ namespace Takeep.Core
 		public static bool Take (string name, bool copy = false, bool notepad = false)
 		{
 			#region Check if name is null
-			
+
 			Item? item = GetItem (name);
 
 			if (!CheckNulls (name))
@@ -88,7 +88,7 @@ namespace Takeep.Core
 			#endregion
 
 			#region Check if item is valid
-			
+
 			if (item == null)
 			{
 				Console.ForegroundColor = ConsoleColor.Red;
@@ -139,7 +139,7 @@ namespace Takeep.Core
 		public static void Remove (string name)
 		{
 			#region Check if name is null
-			
+
 			if (!CheckNulls (name))
 			{
 				return;
@@ -148,7 +148,7 @@ namespace Takeep.Core
 			#endregion
 
 			#region Load Document
-			
+
 			string defaultXml = CheckDirectory () + CheckFile (true);
 
 			XmlDocument document = new ();
@@ -157,7 +157,7 @@ namespace Takeep.Core
 			#endregion
 
 			#region Find Item
-			
+
 			XmlNodeList nodes = document.DocumentElement.SelectNodes ("Item");
 
 			foreach (XmlNode node in nodes)
@@ -178,20 +178,20 @@ namespace Takeep.Core
 			#endregion
 
 			#region Write Error
-			
+
 			Console.ForegroundColor = ConsoleColor.Red;
 			Console.Write ("No items found with name ");
 			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.Write (name);
 			Console.ForegroundColor = ConsoleColor.White;
-			
+
 			#endregion
 		}
 
 		public static void List (string name = "")
 		{
 			#region Load Document
-			
+
 			string defaultXml = CheckDirectory () + CheckFile (true);
 
 			XmlDocument document = new ();
@@ -224,7 +224,7 @@ namespace Takeep.Core
 			#endregion
 
 			#region List All Items
-			
+
 			else
 			{
 				foreach (XmlNode node in nodes)
@@ -237,7 +237,7 @@ namespace Takeep.Core
 			#endregion
 
 			#region Write Error
-			
+
 			if (returns == 0)
 			{
 				Console.ForegroundColor = ConsoleColor.Red;
@@ -250,31 +250,37 @@ namespace Takeep.Core
 
 		public static void Edit (Item item, bool notepad = false)
 		{
-			if (notepad)
+			#region Check if item is null
+			
+			if (!CheckNulls (item))
 			{
-				if (!CheckNulls (item.Name))
-				{
-					return;
-				}
+				return;
+			}
 
+			#endregion
+
+			#region Check if should be opened in notepad
+			
+			else if (notepad)
+			{
 				item.Text = EditNotepad (item.Name);
 
-			}
-			else if (!CheckNulls (item))
-			{
 				return;
 			}
 
-			if (item.Text == null)
-			{
-				return;
-			}
+			#endregion
+
+			#region Load Document
 
 			string defaultXml = CheckDirectory () + CheckFile (true);
 
 			XmlDocument document = new ();
 			document.Load (defaultXml);
 
+			#endregion
+
+			#region Edit Item
+			
 			XmlNodeList nodes = document.DocumentElement.SelectNodes ("Item");
 
 			foreach (XmlNode node in nodes)
@@ -290,8 +296,9 @@ namespace Takeep.Core
 					Console.ForegroundColor = ConsoleColor.White;
 				}
 			}
-		}
 
+			#endregion
+		}
 		private static string CheckDirectory ()
 		{
 			string env = $"C:/Users/{Environment.UserName}/Documents";
