@@ -138,16 +138,26 @@ namespace Takeep.Core
 
 		public static void Remove (string name)
 		{
+			#region Check if name is null
+			
 			if (!CheckNulls (name))
 			{
 				return;
 			}
 
+			#endregion
+
+			#region Load Document
+			
 			string defaultXml = CheckDirectory () + CheckFile (true);
 
 			XmlDocument document = new ();
 			document.Load (defaultXml);
 
+			#endregion
+
+			#region Find Item
+			
 			XmlNodeList nodes = document.DocumentElement.SelectNodes ("Item");
 
 			foreach (XmlNode node in nodes)
@@ -165,11 +175,17 @@ namespace Takeep.Core
 				}
 			}
 
+			#endregion
+
+			#region Write Error
+			
 			Console.ForegroundColor = ConsoleColor.Red;
 			Console.Write ("No items found with name ");
 			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.Write (name);
 			Console.ForegroundColor = ConsoleColor.White;
+			
+			#endregion
 		}
 
 		public static void List (string name = "")
