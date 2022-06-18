@@ -190,10 +190,16 @@ namespace Takeep.Core
 
 		public static void List (string name = "")
 		{
+			#region Load Document
+			
 			string defaultXml = CheckDirectory () + CheckFile (true);
 
 			XmlDocument document = new ();
 			document.Load (defaultXml);
+
+			#endregion
+
+			#region List Items By Name
 
 			XmlNodeList nodes = document.DocumentElement.SelectNodes ("Item");
 
@@ -214,6 +220,11 @@ namespace Takeep.Core
 					}
 				}
 			}
+
+			#endregion
+
+			#region List All Items
+			
 			else
 			{
 				foreach (XmlNode node in nodes)
@@ -223,12 +234,18 @@ namespace Takeep.Core
 				}
 			}
 
+			#endregion
+
+			#region Write Error
+			
 			if (returns == 0)
 			{
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine ($"The process war aborted: No item's name found containing \"{name}\"");
 				Console.ForegroundColor = ConsoleColor.White;
 			}
+
+			#endregion
 		}
 
 		public static void Edit (Item item, bool notepad = false)
