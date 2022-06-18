@@ -253,7 +253,7 @@ namespace Takeep.Core
 			#region Check if item is null
 			
 			if (!CheckNulls (item))
-			{
+			{			
 				return;
 			}
 
@@ -294,11 +294,18 @@ namespace Takeep.Core
 					Console.ForegroundColor = ConsoleColor.Green;
 					Console.WriteLine ("✓ Successfully edited the item!");
 					Console.ForegroundColor = ConsoleColor.White;
+
+					return;
 				}
 			}
 
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine ($"The procces was aborted: No items found with name {item.Name}");
+			Console.ForegroundColor = ConsoleColor.White;
+
 			#endregion
 		}
+		
 		private static string CheckDirectory ()
 		{
 			string env = $"C:/Users/{Environment.UserName}/Documents";
