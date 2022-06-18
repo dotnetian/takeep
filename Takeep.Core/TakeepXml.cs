@@ -42,7 +42,7 @@ namespace Takeep.Core
 
 			#region Keep item
 
-			string xmlPath = CheckDirectory () + CheckFile (true);
+			string xmlPath = CheckDirectory () + CheckFile ();
 
 			XmlDocument xmlDefault = new ();
 
@@ -149,7 +149,7 @@ namespace Takeep.Core
 
 			#region Load Document
 
-			string defaultXml = CheckDirectory () + CheckFile (true);
+			string defaultXml = CheckDirectory () + CheckFile ();
 
 			XmlDocument document = new ();
 			document.Load (defaultXml);
@@ -192,7 +192,7 @@ namespace Takeep.Core
 		{
 			#region Load Document
 
-			string defaultXml = CheckDirectory () + CheckFile (true);
+			string defaultXml = CheckDirectory () + CheckFile ();
 
 			XmlDocument document = new ();
 			document.Load (defaultXml);
@@ -251,16 +251,16 @@ namespace Takeep.Core
 		public static void Edit (Item item, bool notepad = false)
 		{
 			#region Check if item is null
-			
+
 			if (!CheckNulls (item))
-			{			
+			{
 				return;
 			}
 
 			#endregion
 
 			#region Check if should be opened in notepad
-			
+
 			else if (notepad)
 			{
 				item.Text = EditNotepad (item.Name);
@@ -272,7 +272,7 @@ namespace Takeep.Core
 
 			#region Load Document
 
-			string defaultXml = CheckDirectory () + CheckFile (true);
+			string defaultXml = CheckDirectory () + CheckFile ();
 
 			XmlDocument document = new ();
 			document.Load (defaultXml);
@@ -280,7 +280,7 @@ namespace Takeep.Core
 			#endregion
 
 			#region Edit Item
-			
+
 			XmlNodeList nodes = document.DocumentElement.SelectNodes ("Item");
 
 			foreach (XmlNode node in nodes)
@@ -305,7 +305,7 @@ namespace Takeep.Core
 
 			#endregion
 		}
-		
+
 		private static string CheckDirectory ()
 		{
 			string env = $"C:/Users/{Environment.UserName}/Documents";
@@ -323,7 +323,7 @@ namespace Takeep.Core
 			return env + "/keepsheets";
 		}
 
-		private static string CheckFile (bool shortPath = false)
+		private static string CheckFile ()
 		{
 			string xmlPath = $"C:/Users/{Environment.UserName}/Documents/keepsheets/default.tkp";
 
@@ -332,12 +332,7 @@ namespace Takeep.Core
 				File.WriteAllText (xmlPath, "<?xml version=\"1.0\" encoding=\"utf-8\"?><Items></Items>");
 			}
 
-			if (shortPath)
-			{
-				return "/default.tkp";
-			}
-
-			return xmlPath;
+			return "/default.tkp";
 		}
 
 		private static Item GetItem (string name)
