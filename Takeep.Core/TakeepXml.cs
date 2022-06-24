@@ -342,7 +342,7 @@ namespace Takeep.Core
 			string file = CheckFile ();
 
 			XmlDocument document = new ();
-			document.Load (file);
+			document.Load (directory + file);
 
 			XmlNodeList nodes = document.DocumentElement.SelectNodes ("Item");
 
