@@ -53,16 +53,21 @@ var takeNotepad = new Option<bool> ("--open", "Opens the item's content in notep
 takeNotepad.Arity = ArgumentArity.ZeroOrOne;
 takeNotepad.AddAlias ("-o");
 
+var takeKeepsheet = new Option<string> ("--keepsheet", "The keepsheet which item will be looked for. Null to take from default keepsheet");
+takeKeepsheet.Arity = ArgumentArity.ExactlyOne;
+takeKeepsheet.AddAlias ("-k");
+
 var takeCommand = new Command (
 	"take",
 	$"Takes (shows) an Item's text. Take command is useful if you have the exact name of the item & you want to access to it's content.{Environment.NewLine}Examples:{Environment.NewLine}	tkp take -n test    (Writes the text in console, great for quick access){Environment.NewLine}	tkp take -n test -c (Copies the text to clipboard, useful if you don't want to text be shown on screen){Environment.NewLine}	tkp take -n test -o (Opens the text in notepad, great for long texts)")
 {
 	takeName,
 	takeCopy,
-	takeNotepad
+	takeNotepad,
+	takeKeepsheet
 };
 
-takeCommand.SetHandler ((string take, bool copy, bool notepad) =>
+takeCommand.SetHandler ((string take, bool copy, bool notepad, string keepsheet) =>
 {
 	if (take == null)
 	{
@@ -76,7 +81,7 @@ takeCommand.SetHandler ((string take, bool copy, bool notepad) =>
 	{
 		try
 		{
-			TakeepXml.Take (take, copy, notepad);
+			TakeepXml.Take (take, copy, notepad, keepsheet);
 		}
 		catch (Exception exeption)
 		{
@@ -84,7 +89,7 @@ takeCommand.SetHandler ((string take, bool copy, bool notepad) =>
 		}
 	}
 
-}, takeName, takeCopy, takeNotepad);
+}, takeName, takeCopy, takeNotepad, takeKeepsheet);
 
 #endregion
 
