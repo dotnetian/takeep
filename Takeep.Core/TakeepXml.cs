@@ -6,7 +6,7 @@ namespace Takeep.Core
 {
 	public class TakeepXml
 	{
-		public static void Keep (Item item)
+		public static void Keep (Item item, string keepsheet = "")
 		{
 			#region Check if name is null
 
@@ -42,7 +42,7 @@ namespace Takeep.Core
 
 			#region Keep item
 
-			string xmlPath = CheckDirectory () + CheckFile ();
+			string xmlPath = CheckDirectory () + CheckFile (keepsheet);
 
 			XmlDocument xmlDefault = new ();
 
@@ -323,16 +323,21 @@ namespace Takeep.Core
 			return env + "/keepsheets";
 		}
 
-		private static string CheckFile ()
+		private static string CheckFile (string keepsheet = "")
 		{
-			string xmlPath = $"C:/Users/{Environment.UserName}/Documents/keepsheets/default.tkp";
+			if (string.IsNullOrEmpty (keepsheet))
+			{
+				keepsheet = "default";
+			}
+
+			string xmlPath = $"C:/Users/{Environment.UserName}/Documents/keepsheets/{keepsheet}.tkp";
 
 			if (!File.Exists (xmlPath))
 			{
 				File.WriteAllText (xmlPath, "<?xml version=\"1.0\" encoding=\"utf-8\"?><Items></Items>");
 			}
 
-			return "/default.tkp";
+			return $"/{keepsheet}.tkp";
 		}
 
 		private static Item GetItem (string name)
