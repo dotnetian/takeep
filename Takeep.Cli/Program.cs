@@ -7,29 +7,34 @@ var keepName = new Option<string> ("--name", "The name of the item. The item wil
 keepName.Arity = ArgumentArity.ExactlyOne;
 keepName.AddAlias ("-n");
 
-var keepContent = new Option<string> ("--text", "The text of the item. The main content you want to keep");
+var keepContent = new Option<string> ("--text", "The text of the item. The main content you want to keep. Null to write text in notepad");
 keepContent.Arity = ArgumentArity.ExactlyOne;
 keepContent.AddAlias ("-t");
+
+var keepKeepsheet = new Option<string> ("--keepsheet", "The keepsheet which item will keep. Null to keep in default keepsheet");
+keepKeepsheet.Arity = ArgumentArity.ExactlyOne;
+keepKeepsheet.AddAlias ("-k");
 
 var keepCommand = new Command (
 	"keep",
 	$"Keeps (Adds) a text in default takesheet.{Environment.NewLine}Example: 	tkp keep -n test -t \"This is the test text\" (Recommanded for short & quick texts).{Environment.NewLine}Not specifying text (-t or --text) will open notepad, so you can write your text there easier (Recommanded for long or multiline texts).")
 {
 	keepName,
-	keepContent
+	keepContent,
+	keepKeepsheet
 };
 
-keepCommand.SetHandler ((string name, string content) =>
+keepCommand.SetHandler ((string name, string content, string keepsheet) =>
 {
 	try
 	{
-		TakeepXml.Keep (new Item { Name = name, Text = content });
+		TakeepXml.Keep (new Item { Name = name, Text = content }, keepsheet);
 	}
 	catch (Exception exception)
 	{
 		HandleException (exception);
 	}
-}, keepName, keepContent);
+}, keepName, keepContent, keepKeepsheet);
 
 #endregion
 
