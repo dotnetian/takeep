@@ -74,11 +74,11 @@ namespace Takeep.Core
 			#endregion
 		}
 
-		public static bool Take (string name, bool copy = false, bool notepad = false)
+		public static bool Take (string name, bool copy = false, bool notepad = false, string keepsheet = "")
 		{
 			#region Check if name is null
 
-			Item? item = GetItem (name);
+			Item? item = GetItem (name, keepsheet);
 
 			if (!CheckNulls (name))
 			{
@@ -340,11 +340,11 @@ namespace Takeep.Core
 			return $"/{keepsheet}.tkp";
 		}
 
-		private static Item GetItem (string name)
+		private static Item GetItem (string name, string keepsheet = "")
 		{
 			string directory = CheckDirectory ();
 
-			string file = CheckFile ();
+			string file = CheckFile (keepsheet);
 
 			XmlDocument document = new ();
 			document.Load (directory + file);
