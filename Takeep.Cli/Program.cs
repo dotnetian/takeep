@@ -3,16 +3,22 @@ using Takeep.Core;
 
 #region Keep Command
 
-var keepName = new Option<string> ("--name", "The name of the item. The item will be known & shown by this name");
-keepName.Arity = ArgumentArity.ExactlyOne;
+var keepName = new Option<string> ("--name", "The name of the item. The item will be known & shown by this name")
+{
+	Arity = ArgumentArity.ExactlyOne
+};
 keepName.AddAlias ("-n");
 
-var keepContent = new Option<string> ("--text", "The text of the item. The main content you want to keep. Null to write text in notepad");
-keepContent.Arity = ArgumentArity.ExactlyOne;
+var keepContent = new Option<string> ("--text", "The text of the item. The main content you want to keep. Null to write text in notepad")
+{
+	Arity = ArgumentArity.ExactlyOne
+};
 keepContent.AddAlias ("-t");
 
-var keepKeepsheet = new Option<string> ("--keepsheet", "The keepsheet which item will keep. Null to keep in default keepsheet");
-keepKeepsheet.Arity = ArgumentArity.ExactlyOne;
+var keepKeepsheet = new Option<string> ("--keepsheet", "The keepsheet which item will keep. Null to keep in default keepsheet")
+{
+	Arity = ArgumentArity.ExactlyOne
+};
 keepKeepsheet.AddAlias ("-k");
 
 var keepCommand = new Command (
@@ -40,21 +46,29 @@ keepCommand.SetHandler ((string name, string content, string keepsheet) =>
 
 #region Take Command
 
-var takeName = new Option<string> ("--name", "The name of the item");
-takeName.Arity = ArgumentArity.ExactlyOne;
+var takeName = new Option<string> ("--name", "The name of the item")
+{
+	Arity = ArgumentArity.ExactlyOne
+};
 takeName.AddAlias ("-n");
 
 
-var takeCopy = new Option<bool> ("--copy", "Copies the item's text to clipboard & doesn't shows it");
-takeCopy.Arity = ArgumentArity.ZeroOrOne;
+var takeCopy = new Option<bool> ("--copy", "Copies the item's text to clipboard & doesn't shows it")
+{
+	Arity = ArgumentArity.ZeroOrOne
+};
 takeCopy.AddAlias ("-c");
 
-var takeNotepad = new Option<bool> ("--open", "Opens the item's content in notepad");
-takeNotepad.Arity = ArgumentArity.ZeroOrOne;
+var takeNotepad = new Option<bool> ("--open", "Opens the item's content in notepad")
+{
+	Arity = ArgumentArity.ZeroOrOne
+};
 takeNotepad.AddAlias ("-o");
 
-var takeKeepsheet = new Option<string> ("--keepsheet", "The keepsheet which item will be looked for. Null to take from default keepsheet");
-takeKeepsheet.Arity = ArgumentArity.ExactlyOne;
+var takeKeepsheet = new Option<string> ("--keepsheet", "The keepsheet which item will be looked for. Null to take from default keepsheet")
+{
+	Arity = ArgumentArity.ExactlyOne
+};
 takeKeepsheet.AddAlias ("-k");
 
 var takeCommand = new Command (
@@ -99,8 +113,10 @@ var removeName = new Option<string> ("--name", "The name of the item");
 removeName.AddAlias ("-n");
 removeName.Arity = ArgumentArity.ExactlyOne;
 
-var removeKeepsheet = new Option<string> ("--keepsheet", "The keepsheet which item will be looked for. Null to remove from default keepsheet");
-removeKeepsheet.Arity = ArgumentArity.ExactlyOne;
+var removeKeepsheet = new Option<string> ("--keepsheet", "The keepsheet which item will be looked for. Null to remove from default keepsheet")
+{
+	Arity = ArgumentArity.ExactlyOne
+};
 removeKeepsheet.AddAlias ("-k");
 
 var removeCommand = new Command (
@@ -132,25 +148,30 @@ var listName = new Option<string> ("--name");
 listName.AddAlias ("-n");
 listName.Arity = ArgumentArity.ZeroOrOne;
 
+var listKeepsheet = new Option<string> ("--keepsheet");
+listKeepsheet.AddAlias ("-k");
+listKeepsheet.Arity = ArgumentArity.ExactlyOne;
+
 var listCommand = new Command (
-	"list", 
+	"list",
 	"Lists all items in your keepsheet")
 {
-	listName
+	listName,
+	listKeepsheet
 };
 
-listCommand.SetHandler ((string name) =>
+listCommand.SetHandler ((string name, string keepsheet) =>
 {
 	try
 	{
-		TakeepXml.List (name);
+		TakeepXml.List (name, keepsheet);
 	}
 	catch (Exception exception)
 	{
 		HandleException (exception);
 	}
 
-}, listName);
+}, listName, listKeepsheet);
 
 #endregion
 
@@ -164,8 +185,10 @@ var editContent = new Option<string> ("--text", "The text of the item.");
 editContent.AddAlias ("-t");
 editContent.Arity = ArgumentArity.ExactlyOne;
 
-var editNotepad = new Option<bool> ("--open", "Opens the item's content in notepad");
-editNotepad.Arity = ArgumentArity.ZeroOrOne;
+var editNotepad = new Option<bool> ("--open", "Opens the item's content in notepad")
+{
+	Arity = ArgumentArity.ZeroOrOne
+};
 editNotepad.AddAlias ("-o");
 
 
