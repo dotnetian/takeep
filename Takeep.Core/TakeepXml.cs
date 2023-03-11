@@ -188,11 +188,11 @@ public class TakeepXml
 		#endregion
 	}
 
-	public static void List (string name = "")
+	public static void List (string name = "", string keepsheet = "")
 	{
 		#region Load Document
 
-		string defaultXml = CheckDirectory () + CheckFile ();
+		string defaultXml = CheckDirectory () + CheckFile (keepsheet);
 
 		XmlDocument document = new ();
 		document.Load (defaultXml);
@@ -206,10 +206,19 @@ public class TakeepXml
 		int returns = 0;
 
 		Console.ForegroundColor = ConsoleColor.Yellow;
-		Console.WriteLine ("■ The list of items of default keepsheet:");
+
+		if (string.IsNullOrWhiteSpace(keepsheet))
+		{
+			Console.WriteLine ("■ The list of items of default keepsheet:");
+		}
+		else
+		{
+			Console.WriteLine ($"■ The list of items of keepsheet {keepsheet}:");
+		}
+
 		Console.ForegroundColor = ConsoleColor.White;
 
-		if (!string.IsNullOrEmpty (name))
+		if (!string.IsNullOrWhiteSpace (name))
 		{
 			foreach (XmlNode node in nodes)
 			{
@@ -238,10 +247,16 @@ public class TakeepXml
 
 		#region Write Error
 
-		if (returns == 0)
+		if (returns == 0 && !string.IsNullOrWhiteSpace (name))
 		{
 			Console.ForegroundColor = ConsoleColor.Red;
 			Console.WriteLine ($"The process war aborted: No item's name found containing \"{name}\"");
+			Console.ForegroundColor = ConsoleColor.White;
+		}
+		else if (returns == 0 && string.IsNullOrWhiteSpace (name))
+		{
+			Console.ForegroundColor = ConsoleColor.DarkYellow;
+			Console.WriteLine ("No items are in this keepsheet yet. Fell free to add some :)");
 			Console.ForegroundColor = ConsoleColor.White;
 		}
 
