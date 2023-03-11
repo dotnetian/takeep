@@ -99,25 +99,30 @@ var removeName = new Option<string> ("--name", "The name of the item");
 removeName.AddAlias ("-n");
 removeName.Arity = ArgumentArity.ExactlyOne;
 
+var removeKeepsheet = new Option<string> ("--keepsheet", "The keepsheet which item will be looked for. Null to remove from default keepsheet");
+removeKeepsheet.Arity = ArgumentArity.ExactlyOne;
+removeKeepsheet.AddAlias ("-k");
+
 var removeCommand = new Command (
 	"remove",
 	$"Removes an item. Example:{Environment.NewLine}	tkp remove -n test")
 {
-	removeName
+	removeName,
+	removeKeepsheet
 };
 
-removeCommand.SetHandler ((string name) =>
+removeCommand.SetHandler ((string name, string keepsheet) =>
 {
 	try
 	{
-		TakeepXml.Remove (name);
+		TakeepXml.Remove (name, keepsheet);
 	}
 	catch (Exception exception)
 	{
 		HandleException (exception);
 	}
 
-}, removeName);
+}, removeName, removeKeepsheet);
 
 #endregion
 
