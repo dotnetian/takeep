@@ -263,7 +263,7 @@ public class TakeepXml
 		#endregion
 	}
 
-	public static void Edit (Item item, bool notepad = false)
+	public static void Edit (Item item, bool notepad = false, string keepsheet = "")
 	{
 		#region Check if item is null
 
@@ -276,7 +276,7 @@ public class TakeepXml
 
 		#region Check if should be opened in notepad
 
-		else if (notepad)
+		if (notepad)
 		{
 			item.Text = EditNotepad (item.Name);
 
@@ -287,7 +287,7 @@ public class TakeepXml
 
 		#region Load Document
 
-		string defaultXml = CheckDirectory () + CheckFile ();
+		string defaultXml = CheckDirectory () + CheckFile (keepsheet);
 
 		XmlDocument document = new ();
 		document.Load (defaultXml);
