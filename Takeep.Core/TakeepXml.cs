@@ -42,7 +42,7 @@ public class TakeepXml
 
 		#region Keep item
 
-		string xmlPath = CheckDirectory () + CheckFile (keepsheet);
+		string xmlPath = CheckDirectory () + CheckFile (keepsheet, true);
 
 		XmlDocument xmlDefault = new ();
 
@@ -338,7 +338,7 @@ public class TakeepXml
 		return env + "/keepsheets";
 	}
 
-	private static string CheckFile (string keepsheet = "")
+	private static string CheckFile (string keepsheet = "", bool createNew = false)
 	{
 		if (string.IsNullOrEmpty (keepsheet))
 		{
@@ -347,9 +347,13 @@ public class TakeepXml
 
 		string xmlPath = $"C:/Users/{Environment.UserName}/Documents/keepsheets/{keepsheet}.tkp";
 
-		if (!File.Exists (xmlPath))
+		if (!File.Exists (xmlPath) && createNew)
 		{
 			File.WriteAllText (xmlPath, "<?xml version=\"1.0\" encoding=\"utf-8\"?><Items></Items>");
+		}
+		else
+		{
+			throw new KeyNotFoundException ("No keepsheet exists with this name. To create a keepsheet, use --keepsheet option in keep command. Example: tkp keep --keepsheet new --name test");
 		}
 
 		return $"/{keepsheet}.tkp";
