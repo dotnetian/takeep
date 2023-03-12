@@ -191,6 +191,12 @@ var editNotepad = new Option<bool> ("--open", "Opens the item's content in notep
 };
 editNotepad.AddAlias ("-o");
 
+var editKeepsheet = new Option<string> ("--keepsheet", "The keepsheet which item will be looked for. Null to remove from default keepsheet")
+{
+	Arity = ArgumentArity.ExactlyOne
+};
+editKeepsheet.AddAlias ("-k");
+
 
 var editCommand = new Command (
 	"edit",
@@ -198,21 +204,22 @@ var editCommand = new Command (
 {
 	editName,
 	editContent,
-	editNotepad
+	editNotepad,
+	editKeepsheet
 };
 
-editCommand.SetHandler ((string name, string content, bool notepad) =>
+editCommand.SetHandler ((string name, string content, bool notepad, string keepsheet) =>
 {
 	try
 	{
-		TakeepXml.Edit (new Item { Name = name, Text = content }, notepad);
+		TakeepXml.Edit (new Item { Name = name, Text = content }, notepad, keepsheet);
 	}
 	catch (Exception exception)
 	{
 		HandleException (exception);
 	}
 
-}, editName, editContent, editNotepad);
+}, editName, editContent, editNotepad, editKeepsheet);
 
 #endregion
 
