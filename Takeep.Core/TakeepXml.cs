@@ -19,13 +19,17 @@ public class TakeepXml
 
 		#region Check if item exists
 
-		if (GetItem (item.Name) != null)
+		if (GetItem (item.Name, keepsheet) != null)
 		{
 			Console.ForegroundColor = ConsoleColor.Red;
 			Console.WriteLine ("The process was aborted: An item with this name currenty exists");
 			Console.ForegroundColor = ConsoleColor.White;
 
 			return;
+		}
+		else if (CheckKeepsheet (keepsheet) == null)
+		{
+			CreateKeepsheet (keepsheet);
 		}
 
 		#endregion
@@ -42,7 +46,7 @@ public class TakeepXml
 
 		#region Keep item
 
-		string xmlPath = CheckDirectory () + CheckFile (keepsheet, true);
+		string xmlPath = CheckDirectory () + CheckKeepsheet (keepsheet);
 
 		XmlDocument xmlDefault = new ();
 
@@ -149,7 +153,7 @@ public class TakeepXml
 
 		#region Load Document
 
-		string defaultXml = CheckDirectory () + CheckFile (keepsheet);
+		string defaultXml = CheckDirectory () + CheckKeepsheet (keepsheet);
 
 		XmlDocument document = new ();
 		document.Load (defaultXml);
@@ -192,7 +196,7 @@ public class TakeepXml
 	{
 		#region Load Document
 
-		string defaultXml = CheckDirectory () + CheckFile (keepsheet);
+		string defaultXml = CheckDirectory () + CheckKeepsheet (keepsheet);
 
 		XmlDocument document = new ();
 		document.Load (defaultXml);
@@ -207,7 +211,7 @@ public class TakeepXml
 
 		Console.ForegroundColor = ConsoleColor.Yellow;
 
-		if (string.IsNullOrWhiteSpace(keepsheet))
+		if (string.IsNullOrWhiteSpace (keepsheet))
 		{
 			Console.WriteLine ("■ The list of items of default keepsheet:");
 		}
@@ -263,7 +267,7 @@ public class TakeepXml
 		#endregion
 	}
 
-	public static void Edit (Item item, bool notepad = false, string keepsheet = "")
+	public static void Edit (Item item, bool notepad, string keepsheet)
 	{
 		#region Check if item is null
 
@@ -287,7 +291,7 @@ public class TakeepXml
 
 		#region Load Document
 
-		string defaultXml = CheckDirectory () + CheckFile (keepsheet);
+		string defaultXml = CheckDirectory () + CheckKeepsheet (keepsheet);
 
 		XmlDocument document = new ();
 		document.Load (defaultXml);
@@ -330,15 +334,15 @@ public class TakeepXml
 			Directory.CreateDirectory (env + "/keepsheets");
 		}
 
-		if (File.Exists (env + "/keepsheets/default.tkp"))
+		if (!File.Exists (env + "/keepsheets/default.tkp"))
 		{
-			CheckFile ();
+			CreateKeepsheet ("default");
 		}
 
 		return env + "/keepsheets";
 	}
 
-	private static string CheckFile (string keepsheet = "", bool createNew = false)
+	private static string? CheckKeepsheet (string keepsheet = "")
 	{
 		if (string.IsNullOrEmpty (keepsheet))
 		{
@@ -347,23 +351,29 @@ public class TakeepXml
 
 		string xmlPath = $"C:/Users/{Environment.UserName}/Documents/keepsheets/{keepsheet}.tkp";
 
-		if (!File.Exists (xmlPath) && createNew)
+		if (!File.Exists (xmlPath))
 		{
-			File.WriteAllText (xmlPath, "<?xml version=\"1.0\" encoding=\"utf-8\"?><Items></Items>");
-		}
-		else
-		{
-			throw new KeyNotFoundException ("No keepsheet exists with this name. To create a keepsheet, use --keepsheet option in keep command. Example: tkp keep --keepsheet new --name test");
+			return null;
 		}
 
 		return $"/{keepsheet}.tkp";
 	}
 
-	private static Item GetItem (string name, string keepsheet = "")
+	private static void CreateKeepsheet (string name)
+	{
+		string xmlPath = CheckDirectory () + $"/{name}.tkp";
+		File.WriteAllText (xmlPath, "<?xml version=\"1.0\" encoding=\"utf-8\"?><Items></Items>");
+	}
+
+	private static Item? GetItem (string name, string keepsheet = "default")
 	{
 		string directory = CheckDirectory ();
+		string? file = CheckKeepsheet (keepsheet);
 
-		string file = CheckFile (keepsheet);
+		if (string.IsNullOrWhiteSpace (file))
+		{
+			return null;
+		}
 
 		XmlDocument document = new ();
 		document.Load (directory + file);
