@@ -303,25 +303,28 @@ public class TakeepXml
 		#endregion
 	}
 
-	public static void Edit (Item item, bool notepad, string keepsheet)
+	public static void Edit (string name, string content, bool notepad, string keepsheet)
 	{
+		#region Check if should be opened in notepad
+
+		if (notepad)
+		{
+			content = EditNotepad (name, keepsheet);
+
+			if (string.IsNullOrWhiteSpace (content))
+			{
+				return;
+			}
+		}
+
 		#region Check if item is null
 
-		if (!CheckNulls (item))
+		if (!CheckNulls (new Item { Name = name, Text = content}))
 		{
 			return;
 		}
 
 		#endregion
-
-		#region Check if should be opened in notepad
-
-		if (notepad)
-		{
-			item.Text = EditNotepad (item.Name);
-
-			return;
-		}
 
 		#endregion
 
@@ -340,9 +343,9 @@ public class TakeepXml
 
 		foreach (XmlNode node in nodes)
 		{
-			if (node["Name"].InnerText == item.Name)
+			if (node["Name"].InnerText == name)
 			{
-				node["Text"].InnerText = item.Text;
+				node["Text"].InnerText = content;
 
 				document.Save (defaultXml);
 
@@ -355,7 +358,7 @@ public class TakeepXml
 		}
 
 		Console.ForegroundColor = ConsoleColor.Red;
-		Console.WriteLine ($"The procces was aborted: No items found with name {item.Name}");
+		Console.WriteLine ($"The procces was aborted: No items found with name {name}");
 		Console.ForegroundColor = ConsoleColor.White;
 
 		#endregion
@@ -576,7 +579,7 @@ public class TakeepXml
 		p.Kill ();
 	}
 
-	private static string EditNotepad (string name)
+	private static string EditNotepad (string name, string keepsheet)
 	{
 		string directory = CheckDirectory ();
 
@@ -585,7 +588,18 @@ public class TakeepXml
 
 		#region Get Text
 		File.WriteAllText (filePath, $"/# This is the content of item \"{name}\":{Environment.NewLine}");
-		File.AppendAllText (filePath, GetItem (name).Text);
+
+		Item? item = GetItem (name, keepsheet);
+
+		if (item == null)
+		{
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine ($"The procces was aborted: No items found with name {name}");
+			Console.ForegroundColor = ConsoleColor.White;
+			return null;
+		}
+
+		File.AppendAllText (filePath, item.Text);
 
 		FileInfo fileInfo = new (filePath);
 		File.SetAttributes (filePath, FileAttributes.Hidden);
