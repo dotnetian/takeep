@@ -170,6 +170,23 @@ public class TakeepXml
 
 		#endregion
 
+		#region Check if keepsheet exists
+
+		if (CheckKeepsheet (keepsheet) == null)
+		{
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.Write ("The keepsheet ");
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.Write (keepsheet);
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.Write ($" Doesn't exist");
+			Console.ForegroundColor = ConsoleColor.White;
+
+			return;
+		}
+
+		#endregion
+
 		#region Load Document
 
 		string defaultXml = CheckDirectory () + CheckKeepsheet (keepsheet);
@@ -353,16 +370,18 @@ public class TakeepXml
 			Directory.CreateDirectory (env + "/keepsheets");
 		}
 
-		if (!File.Exists (env + "/keepsheets/default.tkp"))
-		{
-			CreateKeepsheet ("default");
-		}
-
 		return env + "/keepsheets";
 	}
 
 	private static string? CheckKeepsheet (string keepsheet = "")
 	{
+		string env = "C:/Users/{Environment.UserName}/Documents/";
+
+		if (!File.Exists (env + "/keepsheets/default.tkp"))
+		{
+			CreateKeepsheet ("default");
+		}
+
 		if (string.IsNullOrEmpty (keepsheet))
 		{
 			keepsheet = "default";
