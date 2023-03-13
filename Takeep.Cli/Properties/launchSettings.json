@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Takeep.Cli": {
-      "commandName": "Project",
-      "commandLineArgs": "keep -n m -t t"
+      "commandName": "Project"
     }
   }
 }
