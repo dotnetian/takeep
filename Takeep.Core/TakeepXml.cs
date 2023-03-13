@@ -375,7 +375,7 @@ public class TakeepXml
 
 	private static string? CheckKeepsheet (string keepsheet = "")
 	{
-		string env = "C:/Users/{Environment.UserName}/Documents/";
+		string env = $"C:/Users/{Environment.UserName}/Documents/";
 
 		if (!File.Exists (env + "/keepsheets/default.tkp"))
 		{
