@@ -78,7 +78,7 @@ public class TakeepXml
 		#endregion
 	}
 
-	public static bool Take (string name, bool copy = false, bool notepad = false, string keepsheet = "")
+	public static bool Take (string name, bool copy = false, bool notepad = false, string keepsheet = "default")
 	{
 		#region Check if name is null
 
@@ -86,6 +86,23 @@ public class TakeepXml
 
 		if (!CheckNulls (name))
 		{
+			return false;
+		}
+
+		#endregion
+
+		#region Check if keepsheet exists
+
+		if (CheckKeepsheet (keepsheet) == null)
+		{
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.Write ("The keepsheet ");
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.Write (keepsheet);
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.Write ($" Doesn't exist");
+			Console.ForegroundColor = ConsoleColor.White;
+
 			return false;
 		}
 
@@ -99,6 +116,8 @@ public class TakeepXml
 			Console.Write ("No items found with name ");
 			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.Write (name);
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.Write ($" in keepsheet {keepsheet}");
 			Console.ForegroundColor = ConsoleColor.White;
 
 			return false;
