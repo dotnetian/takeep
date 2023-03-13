@@ -2,7 +2,7 @@
   "profiles": {
     "Takeep.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "tkp keep --keepsheet test --name tshe -t thethe"
+      "commandLineArgs": "keep -n m -t t"
     }
   }
 }
