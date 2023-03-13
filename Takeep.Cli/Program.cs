@@ -183,7 +183,7 @@ editName.Arity = ArgumentArity.ExactlyOne;
 
 var editContent = new Option<string> ("--text", "The text of the item.");
 editContent.AddAlias ("-t");
-editContent.Arity = ArgumentArity.ExactlyOne;
+editContent.Arity = ArgumentArity.ZeroOrOne;
 
 var editNotepad = new Option<bool> ("--open", "Opens the item's content in notepad")
 {
@@ -212,7 +212,7 @@ editCommand.SetHandler ((string name, string content, bool notepad, string keeps
 {
 	try
 	{
-		TakeepXml.Edit (new Item { Name = name, Text = content }, notepad, keepsheet);
+		TakeepXml.Edit (name, content, notepad, keepsheet);
 	}
 	catch (Exception exception)
 	{
