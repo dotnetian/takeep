@@ -163,26 +163,21 @@ public class TakeepXml
 
 		#endregion
 
-		#region Check if keepsheet exists
-
-		if (CheckKeepsheet (keepsheet) == null)
-		{
-			Console.ForegroundColor = ConsoleColor.Red;
-			Console.Write ("The keepsheet ");
-			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.Write (keepsheet);
-			Console.ForegroundColor = ConsoleColor.Red;
-			Console.Write ($" Doesn't exist");
-			Console.ForegroundColor = ConsoleColor.White;
-
-			return;
-		}
-
-		#endregion
-
 		#region Load Document
 
-		string defaultXml = CheckDirectory () + CheckKeepsheet (keepsheet);
+		string defaultXml = string.Empty;
+
+		try
+		{
+			defaultXml = CheckDirectory () + CheckKeepsheet (keepsheet);
+		}
+		catch (Exception)
+		{
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine ($"The process was aborted: No keepsheet found named \"{keepsheet}\"");
+			Console.ForegroundColor = ConsoleColor.White;
+			return;
+		}
 
 		XmlDocument document = new ();
 		document.Load (defaultXml);
