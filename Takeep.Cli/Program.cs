@@ -144,8 +144,8 @@ removeCommand.SetHandler ((string name, string keepsheet) =>
 
 #region List Command
 
-var listName = new Option<string> ("--name");
-listName.AddAlias ("-n");
+var listName = new Option<string> ("--filter");
+listName.AddAlias ("-f");
 listName.Arity = ArgumentArity.ZeroOrOne;
 
 var listKeepsheet = new Option<string> ("--keepsheet");
