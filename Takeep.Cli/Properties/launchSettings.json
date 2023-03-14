@@ -2,7 +2,7 @@
   "profiles": {
     "Takeep.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "edit -n me -k keep -o"
+      "commandLineArgs": "list --keepsheet keep"
     }
   }
 }

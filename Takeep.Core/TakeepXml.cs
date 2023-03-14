@@ -232,7 +232,19 @@ public class TakeepXml
 	{
 		#region Load Document
 
-		string defaultXml = CheckDirectory () + CheckKeepsheet (keepsheet);
+		string defaultXml = string.Empty;
+
+		try
+		{
+			defaultXml = CheckDirectory () + CheckKeepsheet (keepsheet);
+		}
+		catch (Exception)
+		{
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine ($"The process war aborted: No keepsheet found named \"{keepsheet}\"");
+			Console.ForegroundColor = ConsoleColor.White;
+			return;
+		}
 
 		XmlDocument document = new ();
 		document.Load (defaultXml);
@@ -319,7 +331,7 @@ public class TakeepXml
 
 		#region Check if item is null
 
-		if (!CheckNulls (new Item { Name = name, Text = content}))
+		if (!CheckNulls (new Item { Name = name, Text = content }))
 		{
 			return;
 		}
@@ -394,7 +406,7 @@ public class TakeepXml
 
 		if (!File.Exists (xmlPath))
 		{
-			return null;
+			throw new Exception ($"Keepsheet named {keepsheet} doesn't exist");
 		}
 
 		return $"/{keepsheet}.tkp";
