@@ -78,32 +78,27 @@ public class TakeepXml
 		#endregion
 	}
 
-	public static bool Take (string name, bool copy = false, bool notepad = false, string keepsheet = "default")
+	public static void Take (string name, bool copy = false, bool notepad = false, string keepsheet = "default")
 	{
 		#region Check if name is null
 
-		Item? item = GetItem (name, keepsheet);
+		Item? item = new ();
+
+		try
+		{
+			item = GetItem (name, keepsheet);
+		}
+		catch (Exception)
+		{
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine ($"The process was aborted: No keepsheet found named \"{keepsheet}\"");
+			Console.ForegroundColor = ConsoleColor.White;
+			return;
+		}
 
 		if (!CheckNulls (name))
 		{
-			return false;
-		}
-
-		#endregion
-
-		#region Check if keepsheet exists
-
-		if (CheckKeepsheet (keepsheet) == null)
-		{
-			Console.ForegroundColor = ConsoleColor.Red;
-			Console.Write ("The keepsheet ");
-			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.Write (keepsheet);
-			Console.ForegroundColor = ConsoleColor.Red;
-			Console.Write ($" Doesn't exist");
-			Console.ForegroundColor = ConsoleColor.White;
-
-			return false;
+			return;
 		}
 
 		#endregion
@@ -120,7 +115,7 @@ public class TakeepXml
 			Console.Write ($" in keepsheet {keepsheet}");
 			Console.ForegroundColor = ConsoleColor.White;
 
-			return false;
+			return;
 		}
 
 		#endregion
@@ -155,8 +150,6 @@ public class TakeepXml
 			Console.ForegroundColor = ConsoleColor.White;
 		}
 		#endregion
-
-		return true;
 	}
 
 	public static void Remove (string name, string keepsheet = "")
@@ -241,7 +234,7 @@ public class TakeepXml
 		catch (Exception)
 		{
 			Console.ForegroundColor = ConsoleColor.Red;
-			Console.WriteLine ($"The process war aborted: No keepsheet found named \"{keepsheet}\"");
+			Console.WriteLine ($"The process was aborted: No keepsheet found named \"{keepsheet}\"");
 			Console.ForegroundColor = ConsoleColor.White;
 			return;
 		}
